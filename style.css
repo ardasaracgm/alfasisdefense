@@ -309,6 +309,58 @@ h1,h2,h3,h4 { font-family: 'Barlow Condensed', sans-serif; line-height: 1.1; let
 .domain-card h3 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
 .domain-card p { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
 
+/* ── CLIENTS SLIDER ── */
+#clients {
+  padding: 56px 0;
+  background: var(--bg-2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.clients-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.clients-track-wrap {
+  overflow: hidden;
+  -webkit-mask: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+.clients-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: max-content;
+  animation: marquee 36s linear infinite;
+}
+.clients-track:hover { animation-play-state: paused; }
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.client-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 40px;
+  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+  height: 72px;
+}
+.client-logo img {
+  height: 40px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.45;
+  transition: opacity 0.25s, filter 0.25s;
+}
+.client-logo:hover img {
+  opacity: 1;
+  filter: brightness(0) invert(1);
+}
+
 /* ── PRODUCTS ── */
 #products { padding: 100px 0; background: var(--bg-2); }
 
