@@ -620,9 +620,7 @@ const MODALS = {
       { label: "Application", val: "Critical Institutions" },
       { label: "Mode", val: "Surgical Suppression" }
     ]
-  }
-};
-
+  },
   "k-100": {
     img: "https://www.rdnsoft.com/products/k-100/images/hero.webp",
     cat: "Strike UAV — Fixed Wing Kamikaze",
@@ -875,6 +873,9 @@ const MODALS = {
       { label: "Environment", val: "Urban High-Rise" }
     ]
   },
+};
+
+// ── STATE ──────────────────────────
 let currentLang = 'en';
 
 // ── INIT ──────────────────────────
