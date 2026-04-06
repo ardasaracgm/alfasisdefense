@@ -8,6 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+    gtag('config', 'AW-XXXXXXXXXX'); // Google Ads — replace with your Conversion ID
+  </script>
 </head>
 <body>
 
@@ -778,22 +787,23 @@
           <span data-i18n="contact.whatsapp">Chat on WhatsApp</span>
         </a>
       </div>
-      <form class="contact-form" id="contactForm">
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="hidden" name="_subject" value="Inquiry — alfasisdefense.com" />
         <div class="form-group">
           <label data-i18n="form.name">Full Name</label>
-          <input type="text" id="fname" required />
+          <input type="text" name="name" id="fname" required />
         </div>
         <div class="form-group">
           <label data-i18n="form.org">Organization</label>
-          <input type="text" id="forg" />
+          <input type="text" name="organization" id="forg" />
         </div>
         <div class="form-group">
           <label data-i18n="form.email">Email Address</label>
-          <input type="email" id="femail" required />
+          <input type="email" name="email" id="femail" required />
         </div>
         <div class="form-group">
           <label data-i18n="form.interest">Area of Interest</label>
-          <select id="finterest">
+          <select name="interest" id="finterest">
             <option value="" data-i18n="form.select">Select interest area</option>
             <option value="ew" data-i18n="form.ew">Electronic Warfare Systems</option>
             <option value="drones" data-i18n="form.drones">Drone Systems</option>
@@ -803,9 +813,9 @@
         </div>
         <div class="form-group">
           <label data-i18n="form.message">Message</label>
-          <textarea id="fmessage" rows="4"></textarea>
+          <textarea name="message" id="fmessage" rows="4"></textarea>
         </div>
-        <button type="submit" class="btn-primary full-width" data-i18n="form.submit">Request Consultation</button>
+        <button type="submit" class="btn-primary full-width" id="mainSubmitBtn" data-i18n="form.submit">Request Consultation</button>
         <p class="form-note" id="formNote"></p>
       </form>
     </div>
@@ -849,7 +859,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 Alfasis Savunma Mühendislik Anonim Şirketi. <span data-i18n="footer.rights">All rights reserved.</span></p>
+      <p>© 2025 Alfasis Savunma Mühendislik Anonim Şirketi. <span data-i18n="footer.rights">All rights reserved.</span> · <a href="/privacy.html" style="color:var(--text-muted)">Privacy Policy</a></p>
     </div>
   </div>
 </footer>
