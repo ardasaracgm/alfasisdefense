@@ -56,6 +56,19 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg">
+    <!-- VIDEO CAROUSEL -->
+    <div class="video-carousel">
+      <video class="hero-video active" autoplay muted playsinline preload="auto" data-index="0">
+        <source src="assets/videos/hero1.mp4" type="video/mp4" />
+      </video>
+      <video class="hero-video" muted playsinline preload="none" data-index="1">
+        <source src="assets/videos/hero2.mp4" type="video/mp4" />
+      </video>
+      <video class="hero-video" muted playsinline preload="none" data-index="2">
+        <source src="assets/videos/hero3.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="hero-video-overlay"></div>
     <div class="hero-grid-lines"></div>
     <div class="hero-glow-1"></div>
     <div class="hero-glow-2"></div>
@@ -81,6 +94,17 @@
     <div class="stat"><span class="stat-num">3</span><span class="stat-label" data-i18n="stats.domains">Capability Domains</span></div>
     <div class="stat-div"></div>
     <div class="stat"><span class="stat-num">24/7</span><span class="stat-label" data-i18n="stats.ops">Operational</span></div>
+  </div>
+
+  <!-- VIDEO CAROUSEL CONTROLS -->
+  <div class="carousel-controls">
+    <button class="carousel-arrow" id="carouselPrev" aria-label="Previous">&#8592;</button>
+    <div class="carousel-dots">
+      <button class="carousel-dot active" data-dot="0"></button>
+      <button class="carousel-dot" data-dot="1"></button>
+      <button class="carousel-dot" data-dot="2"></button>
+    </div>
+    <button class="carousel-arrow" id="carouselNext" aria-label="Next">&#8594;</button>
   </div>
 </section>
 
