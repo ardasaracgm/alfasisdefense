@@ -1120,24 +1120,36 @@ window.closeModal = closeModal;
 function initForm() {
   const form = document.getElementById('contactForm');
   const note = document.getElementById('formNote');
+  const btn  = document.getElementById('mainSubmitBtn');
   if (!form) return;
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
-    const name = document.getElementById('fname').value.trim();
-    const email = document.getElementById('femail').value.trim();
-    if (!name || !email) return;
-
-    // Build mailto link
-    const org = document.getElementById('forg').value.trim();
-    const interest = document.getElementById('finterest').value;
-    const message = document.getElementById('fmessage').value.trim();
-    const subject = encodeURIComponent(`Alfasis Defense Inquiry — ${interest || 'General'}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nOrganization: ${org}\nEmail: ${email}\nInterest: ${interest}\n\nMessage:\n${message}`
-    );
-    window.location.href = `mailto:info@alfasisdefense.com?subject=${subject}&body=${body}`;
-    note.textContent = '✓ Opening your email client...';
-    setTimeout(() => { note.textContent = ''; }, 4000);
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        note.textContent = '✓ Message received. We will respond within 24 hours.';
+        note.style.color = '#4ade80';
+        form.reset();
+        // GA4 conversion event
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'form_submit', { event_category: 'lead', event_label: 'main_contact' });
+        }
+      } else {
+        throw new Error();
+      }
+    } catch {
+      note.textContent = 'Error sending. Please email info@alfasisdefense.com directly.';
+      note.style.color = '#f87171';
+    }
+    btn.textContent = 'Request Consultation';
+    btn.disabled = false;
+    setTimeout(() => { note.textContent = ''; }, 6000);
   });
 }
