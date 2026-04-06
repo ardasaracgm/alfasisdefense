@@ -342,23 +342,26 @@ h1,h2,h3,h4 { font-family: 'Barlow Condensed', sans-serif; line-height: 1.1; let
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 40px;
-  border-right: 1px solid var(--border);
+  padding: 12px 28px;
   flex-shrink: 0;
-  height: 72px;
+  height: 88px;
 }
 .client-logo img {
-  height: 40px;
+  height: 52px;
   width: auto;
-  max-width: 120px;
+  max-width: 130px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
-  opacity: 0.45;
-  transition: opacity 0.25s, filter 0.25s;
+  filter: none;
+  opacity: 1;
+  background: #fff;
+  border-radius: 6px;
+  padding: 8px 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  transition: transform 0.25s, box-shadow 0.25s;
 }
 .client-logo:hover img {
-  opacity: 1;
-  filter: brightness(0) invert(1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
 }
 
 /* ── PRODUCTS ── */
