@@ -923,6 +923,70 @@ const MODALS = {
 // ── STATE ──────────────────────────
 let currentLang = 'en';
 
+// ── VIDEO CAROUSEL ──────────────────────
+function initCarousel() {
+  const videos  = Array.from(document.querySelectorAll('.hero-video'));
+  const dots    = Array.from(document.querySelectorAll('.carousel-dot'));
+  const prevBtn = document.getElementById('carouselPrev');
+  const nextBtn = document.getElementById('carouselNext');
+  if (!videos.length) return;
+
+  let current = 0;
+  let autoTimer = null;
+
+  function goTo(index) {
+    const prev = current;
+    current = (index + videos.length) % videos.length;
+
+    // Swap video
+    videos[prev].classList.remove('active');
+    videos[current].classList.add('active');
+    videos[current].currentTime = 0;
+    videos[current].play().catch(() => {});
+
+    // Swap dots
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+      d.classList.remove('animating');
+    });
+    // Trigger progress animation on active dot
+    requestAnimationFrame(() => {
+      const dur = videos[current].duration || 8;
+      dots[current].style.setProperty('--dot-duration', dur + 's');
+      dots[current].classList.add('animating');
+    });
+
+    resetAutoPlay();
+  }
+
+  function resetAutoPlay() {
+    clearTimeout(autoTimer);
+  }
+
+  // Auto-advance when video ends
+  videos.forEach((v, i) => {
+    v.addEventListener('ended', () => goTo(i + 1));
+    // Also set progress on metadata load
+    v.addEventListener('loadedmetadata', () => {
+      if (i === current) {
+        dots[i].style.setProperty('--dot-duration', v.duration + 's');
+      }
+    });
+  });
+
+  // Dot clicks
+  dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+
+  // Arrow clicks
+  prevBtn?.addEventListener('click', () => goTo(current - 1));
+  nextBtn?.addEventListener('click', () => goTo(current + 1));
+
+  // Init first dot progress
+  const firstDur = videos[0].duration || 8;
+  dots[0].style.setProperty('--dot-duration', firstDur + 's');
+  dots[0].classList.add('animating');
+}
+
 // ── INIT ──────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
@@ -930,6 +994,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCatTabs();
   initModal();
   initForm();
+  initCarousel();
   applyLang('en');
 });
 
