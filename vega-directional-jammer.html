@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VEGA | Multi-Band Directional Jammer | Alfasis Defense</title>
+  <meta name="description" content="VEGA — long-range multi-band directional jammer system for counter-UAV, high-value site protection, perimeter security, and strategic RF denial missions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: #f1f3f8; color: #1a1f2e; font-size: 16px; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 64px; background: rgba(10,13,22,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; padding: 0 20px; }
+    .nav-inner { width: 100%; max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo img { height: 30px; width: auto; }
+    .nav-logo-text { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.06em; display: none; }
+    .nav-logo-text em { color: #0b78c8; font-style: normal; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-back { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); transition: color 0.2s; }
+    .nav-back:hover { color: #fff; }
+    .nav-wa { background: #25d366; color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; padding: 7px 14px; border-radius: 4px; }
+
+    .hero { margin-top: 64px; background: #0a0d16; position: relative; }
+    .hero-img { width: 100%; aspect-ratio: 16/7; object-fit: cover; object-position: center; display: block; }
+    .hero-bottom { padding: 24px 20px 32px; }
+    .hero-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #0b78c8; text-transform: uppercase; margin-bottom: 8px; display: block; }
+    .hero-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(46px, 8vw, 80px); font-weight: 800; color: #fff; line-height: 0.95; letter-spacing: -0.01em; margin-bottom: 10px; }
+    .hero-title em { color: #0b78c8; font-style: normal; }
+    .hero-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.14em; color: #9bd8ff; text-transform: uppercase; margin-bottom: 20px; display: block; }
+    .dtn { display: flex; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
+    .dtn-i { flex: 1; text-align: center; padding: 12px 6px; border-right: 1px solid rgba(255,255,255,0.08); }
+    .dtn-i:last-child { border-right: none; }
+    .dtn-v { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 800; color: #fff; line-height: 1; }
+    .dtn-v.blue { color: #26a8ff; }
+    .dtn-n { display: block; font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.35); margin-top: 3px; letter-spacing: 0.06em; }
+
+    .body { background: #f1f3f8; }
+    .qspecs { background: #fff; border-bottom: 1px solid #e0e4ed; display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .qspecs::-webkit-scrollbar { display: none; }
+    .qs-i { flex-shrink: 0; padding: 16px 20px; border-right: 1px solid #e0e4ed; text-align: center; min-width: 125px; }
+    .qs-i:last-child { border-right: none; }
+    .qs-v { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: #0b78c8; line-height: 1; }
+    .qs-l { display: block; font-family: 'Share Tech Mono', monospace; font-size: 9px; color: #8a92a8; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+
+    .sec { padding: 36px 20px; border-bottom: 1px solid #e0e4ed; }
+    .sec:last-of-type { border-bottom: none; }
+    .sec-inner { max-width: 820px; margin: 0 auto; }
+    .sec-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #0b78c8; text-transform: uppercase; margin-bottom: 10px; display: block; }
+    .sec h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 800; color: #1a1f2e; line-height: 1.05; margin-bottom: 12px; }
+    .sec p { font-size: 15px; color: #4a5268; line-height: 1.75; margin-bottom: 10px; }
+
+    .caps { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .cap { background: #fff; border: 1px solid #e0e4ed; border-radius: 8px; padding: 18px; display: flex; gap: 14px; align-items: flex-start; }
+    .cap-n { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 800; color: #0b78c8; min-width: 32px; line-height: 1; padding-top: 2px; }
+    .cap h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: #1a1f2e; margin-bottom: 4px; }
+    .cap p { font-size: 13px; color: #4a5268; line-height: 1.6; margin: 0; }
+    .cap-tag { display: inline-block; margin-top: 7px; font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.1em; background: #eef8ff; border: 1px solid rgba(11,120,200,0.25); color: #0b78c8; padding: 3px 8px; border-radius: 2px; }
+
+    .subs { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+    .sub { background: #fff; border: 1px solid #e0e4ed; border-radius: 8px; overflow: hidden; }
+    .sub-head { background: #1a1f2e; padding: 12px 18px; display: flex; align-items: center; gap: 10px; }
+    .sub-head .ico { font-size: 16px; }
+    .sub-head h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; color: #fff; margin: 0; }
+    .sub-head .stag { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; }
+    .sub-rows { width: 100%; border-collapse: collapse; }
+    .sub-rows tr { border-bottom: 1px solid #f0f2f7; }
+    .sub-rows tr:last-child { border-bottom: none; }
+    .sub-rows td { padding: 9px 16px; font-size: 12.5px; line-height: 1.5; vertical-align: top; }
+    .sub-rows td:first-child { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: #8a92a8; width: 42%; background: #f8f9fc; border-right: 1px solid #eef0f6; }
+    .sub-rows td:last-child { color: #1a1f2e; font-weight: 500; }
+    .sub-rows tr:nth-child(even) td:last-child { background: #fafbfd; }
+
+    .use { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+    .use-i { background: #fff; border: 1px solid #e0e4ed; border-radius: 6px; padding: 16px; }
+    .use-i h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; color: #1a1f2e; margin-bottom: 4px; }
+    .use-i p { font-size: 13px; line-height: 1.55; margin: 0; }
+
+    .form-wrap { background: #fff; border: 1px solid #e0e4ed; border-radius: 8px; padding: 24px; margin-top: 12px; }
+    .f-group { margin-bottom: 14px; }
+    .f-group label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8a92a8; margin-bottom: 6px; }
+    .f-group input, .f-group textarea { background: #f8f9fc; border: 1.5px solid #e0e4ed; color: #1a1f2e; border-radius: 4px; font-family: 'Barlow', sans-serif; font-size: 15px; padding: 11px 14px; width: 100%; outline: none; transition: border-color 0.2s; }
+    .f-group input:focus, .f-group textarea:focus { border-color: #0b78c8; background: #fff; }
+    .f-group textarea { resize: vertical; min-height: 90px; }
+    .f-submit { background: #0b78c8; color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px; border: none; border-radius: 4px; width: 100%; cursor: pointer; transition: background 0.2s; }
+    .f-submit:hover { background: #0d8be5; }
+    .f-note { font-size: 13px; text-align: center; margin-top: 10px; min-height: 18px; }
+
+    .sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; z-index: 90; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); border-top: 1px solid #e0e4ed; padding: 12px 16px; display: flex; gap: 10px; }
+    .sticky-cta a { flex: 1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 12px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .s-wa { background: transparent; border: 1.5px solid #e0e4ed; color: #1a1f2e; }
+    .s-req { background: #0b78c8; color: #fff; }
+
+    .foot { background: #1a1f2e; padding: 24px 20px; text-align: center; }
+    .foot p { font-size: 12px; color: rgba(255,255,255,0.3); }
+    .foot a { color: rgba(255,255,255,0.4); }
+
+    @media (min-width: 768px) {
+      .hero-bottom { padding: 32px 48px 40px; max-width: 860px; margin: 0 auto; }
+      .dtn-v { font-size: 20px; }
+      .qspecs { justify-content: center; }
+      .qs-i { min-width: 140px; padding: 20px 24px; }
+      .qs-v { font-size: 22px; }
+      .sec { padding: 56px 20px; }
+      .sec h2 { font-size: 34px; }
+      .caps { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .use { grid-template-columns: repeat(2, 1fr); }
+      .sticky-cta { display: none; }
+      .sec:last-of-type { padding-bottom: 72px; }
+    }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');gtag('event','qr_scan',{event_category:'product_page',event_label:'vega_directional_jammer'});</script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="https://kp.idef.com.tr/storage/64226/Alfasis-Logo.png" alt="Alfasis Defense" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+      <span class="nav-logo-text">ALFASIS <em>DEFENSE</em></span>
+    </a>
+    <div class="nav-right">
+      <a href="/" class="nav-back">← All Products</a>
+      <a href="https://wa.me/905425288514" target="_blank" class="nav-wa">WhatsApp</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <img src="assets/vega-alfasis.webp" alt="VEGA Multi-Band Directional Jammer" class="hero-img" />
+  <div class="hero-bottom">
+    <span class="hero-tag">Multi-Band Directional Jammer · Alfasis Defense</span>
+    <h1 class="hero-title"><em>VEGA</em><br/>DIRECTIONAL JAMMER</h1>
+    <span class="hero-sub">Long-Range Directional RF Denial</span>
+    <div class="dtn">
+      <div class="dtn-i"><span class="dtn-v">DETECT</span><span class="dtn-n">Threat direction</span></div>
+      <div class="dtn-i"><span class="dtn-v blue">DISRUPT</span><span class="dtn-n">Focused RF energy</span></div>
+      <div class="dtn-i"><span class="dtn-v">NEUTRALIZE</span><span class="dtn-n">Before perimeter</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="body">
+
+<div class="qspecs">
+  <div class="qs-i"><span class="qs-v">Multi-Band</span><span class="qs-l">RF Suppression</span></div>
+  <div class="qs-i"><span class="qs-v">Directional</span><span class="qs-l">High Focus</span></div>
+  <div class="qs-i"><span class="qs-v">Long Range</span><span class="qs-l">Early Engagement</span></div>
+  <div class="qs-i"><span class="qs-v">Counter-UAV</span><span class="qs-l">Drone Defense</span></div>
+  <div class="qs-i"><span class="qs-v">Perimeter</span><span class="qs-l">Site Security</span></div>
+  <div class="qs-i"><span class="qs-v">Modular</span><span class="qs-l">Mission Ready</span></div>
+</div>
+
+<div class="sec">
+  <div class="sec-inner">
+    <span class="sec-tag">System Overview</span>
+    <h2>Directional power for high-value protection.</h2>
+    <p>VEGA is a multi-band directional electronic warfare system designed for long-range RF denial, counter-UAV operations, perimeter security, and strategic protection of high-value sites.</p>
+    <p>Instead of radiating equally in all directions, VEGA focuses jamming energy toward the threat direction. This provides stronger suppression effect, better control over the engagement sector, and an optimized response against UAVs approaching protected zones.</p>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-inner">
+    <span class="sec-tag">Core Capabilities</span>
+    <h2>Focused disruption. Controlled denial.</h2>
+    <div class="caps">
+      <div class="cap"><div class="cap-n">01</div><div><h3>Directional RF Suppression</h3><p>Focuses jamming energy toward the threat axis to create a stronger and more controlled denial effect than wide-area broadcast methods.</p><span class="cap-tag">Focused Energy</span></div></div>
+      <div class="cap"><div class="cap-n">02</div><div><h3>Long-Range Operational Reach</h3><p>Built for scenarios where aerial threats must be engaged before entering the protected perimeter or critical asset zone.</p><span class="cap-tag">Early Engagement</span></div></div>
+      <div class="cap"><div class="cap-n">03</div><div><h3>Counter-UAV Mission Role</h3><p>Supports protection of strategic sites, field positions, border areas, and temporary deployed assets against drone-based threats.</p><span class="cap-tag">Counter-UAV</span></div></div>
+      <div class="cap"><div class="cap-n">04</div><div><h3>Modular EW Deployment</h3><p>Designed as part of a layered electronic warfare architecture for integration with detection, tracking, and command systems.</p><span class="cap-tag">Layered Defense</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-inner">
+    <span class="sec-tag">Technical Specifications</span>
+    <h2>VEGA system profile.</h2>
+    <div class="subs">
+      <div class="sub">
+        <div class="sub-head"><span class="ico">📡</span><div><div class="stag">EW SYSTEM</div><h3>VEGA — Multi-Band Directional Jammer</h3></div></div>
+        <table class="sub-rows">
+          <tr><td>System Type</td><td>Multi-band directional jammer</td></tr>
+          <tr><td>Mission Role</td><td>Counter-UAV · perimeter security · high-value site protection</td></tr>
+          <tr><td>Suppression Logic</td><td>Directional RF denial focused toward the threat sector</td></tr>
+          <tr><td>Operational Reach</td><td>Long-range engagement before protected perimeter entry</td></tr>
+          <tr><td>Deployment Concept</td><td>Fixed-site, mobile, and modular mission integration</td></tr>
+          <tr><td>Protection Profile</td><td>Strategic facility, convoy staging area, border zone, forward operating site</td></tr>
+          <tr><td>Integration</td><td>Compatible with layered C-UAS architecture: detection, tracking, jamming, command</td></tr>
+          <tr><td>Control Purpose</td><td>Controlled sector denial with reduced unnecessary RF exposure outside the target direction</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-inner">
+    <span class="sec-tag">Operational Scenarios</span>
+    <h2>Built for strategic denial zones.</h2>
+    <div class="use">
+      <div class="use-i"><h3>Critical Infrastructure</h3><p>Protects high-value facilities, energy sites, airports, ports, and government areas from approaching UAV threats.</p></div>
+      <div class="use-i"><h3>Military Perimeter Defense</h3><p>Creates a focused RF denial sector around bases, forward positions, ammunition depots, and command areas.</p></div>
+      <div class="use-i"><h3>Border & Coastal Security</h3><p>Supports long-range observation and response zones where threats must be disrupted before crossing protected boundaries.</p></div>
+      <div class="use-i"><h3>Event & VIP Protection</h3><p>Provides directional protection for temporary high-security areas, official visits, summits, and restricted zones.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec" id="contact">
+  <div class="sec-inner">
+    <span class="sec-tag">Request Information</span>
+    <h2>Evaluate VEGA for your mission.</h2>
+    <p>Share your operational environment, protected area size, and deployment concept. We respond within 24 hours.</p>
+    <div class="form-wrap">
+      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" id="vegaForm">
+        <input type="hidden" name="_subject" value="VEGA Directional Jammer Inquiry" />
+        <input type="hidden" name="product" value="VEGA Multi-Band Directional Jammer" />
+        <div class="f-group"><label>Full Name *</label><input type="text" name="name" required /></div>
+        <div class="f-group"><label>Organization / Country *</label><input type="text" name="organization" required /></div>
+        <div class="f-group"><label>Email Address *</label><input type="email" name="email" required /></div>
+        <div class="f-group"><label>Message</label><textarea name="message" placeholder="Mission profile, protected area, threat direction, deployment requirements..."></textarea></div>
+        <button type="submit" class="f-submit" id="vegaBtn">Send Inquiry</button>
+        <p class="f-note" id="vegaNote"></p>
+      </form>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="sticky-cta">
+  <a href="https://wa.me/905425288514?text=VEGA%20Directional%20Jammer%20inquiry" target="_blank" class="s-wa">WhatsApp</a>
+  <a href="#contact" class="s-req">Request Consultation</a>
+</div>
+
+<footer class="foot">
+  <p>© 2025 Alfasis Savunma Mühendislik A.Ş. &nbsp;·&nbsp; <a href="/">alfasisdefense.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy Policy</a></p>
+</footer>
+
+<script>
+document.getElementById('vegaForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('vegaBtn');
+  const note = document.getElementById('vegaNote');
+  btn.textContent = 'Sending...'; btn.disabled = true;
+  try {
+    const res = await fetch(this.action, { method:'POST', body:new FormData(this), headers:{'Accept':'application/json'} });
+    if (res.ok) {
+      note.textContent = '✓ Received. We will respond within 24 hours.';
+      note.style.color = '#16a34a'; this.reset();
+      if (typeof gtag !== 'undefined') gtag('event','form_submit',{event_category:'lead',event_label:'vega_directional_jammer'});
+    } else throw new Error();
+  } catch { note.textContent = 'Error. Please email info@alfasisdefense.com'; note.style.color = '#dc2626'; }
+  btn.textContent = 'Send Inquiry'; btn.disabled = false;
+});
+</script>
+</body>
+</html>
