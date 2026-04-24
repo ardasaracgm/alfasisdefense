@@ -4,120 +4,123 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ALFA SENTINEL | Mobile Counter-UAS Command Platform | Alfasis Defense</title>
-  <meta name="description" content="ALFA SENTINEL — Mercedes-Benz Sprinter 519 based mobile counter-UAS command platform. RF detection 70MHz–6GHz, drone jamming 430MHz–6GHz, EO/IR tracking, AES-256 encrypted C2." />
+  <meta name="description" content="ALFA SENTINEL — Mercedes-Benz Sprinter 519 based mobile counter-UAS command platform. RF detection 70MHz–6GHz, jamming 430MHz–6GHz, EO/IR, AES-256." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --p-bg:#f2f4f8; --p-bg2:#ffffff; --p-card:#ffffff; --p-border:#e0e4ed;
-      --p-text:#1a1f2e; --p-dim:#4a5268; --p-muted:#8a92a8;
-      --p-red:#c8102e; --p-gold:#9a6400; --p-goldbg:#fef9ee; --p-redbg:#fff5f7;
-    }
-    body { background:var(--p-bg); color:var(--p-text); }
-    .prod-nav { max-width:1200px; margin:0 auto; padding:0 20px; height:100%; display:flex; align-items:center; justify-content:space-between; }
-    .back-link { font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:0.1em; color:var(--text-dim); display:flex; align-items:center; gap:6px; transition:color 0.2s; }
-    .back-link:hover { color:var(--white); }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: #f1f3f8; color: #1a1f2e; font-size: 16px; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
 
-    /* SPLIT HERO */
-    .ph-split { padding-top:var(--nav-h); display:grid; grid-template-columns:400px 1fr; min-height:calc(100vh - var(--nav-h)); background:var(--bg); }
-    .ph-img-col { position:sticky; top:var(--nav-h); height:calc(100vh - var(--nav-h)); overflow:hidden; }
-    .ph-img-col img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
-    .ph-img-overlay { position:absolute; inset:0; background:linear-gradient(to right,rgba(8,11,18,0) 60%,rgba(8,11,18,0.5) 100%); }
-    .ph-content-col { background:var(--p-bg); padding:48px 40px 120px; }
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 64px; background: rgba(10,13,22,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; padding: 0 20px; }
+    .nav-inner { width: 100%; max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo img { height: 30px; width: auto; }
+    .nav-logo-text { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.06em; display: none; }
+    .nav-logo-text em { color: #c8102e; font-style: normal; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-back { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); transition: color 0.2s; }
+    .nav-back:hover { color: #fff; }
+    .nav-wa { background: #25d366; color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; padding: 7px 14px; border-radius: 4px; }
 
-    .ph-system-tag { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--p-red); margin-bottom:10px; display:block; }
-    .ph-hero-title { font-size:clamp(52px,6vw,80px); font-weight:800; color:var(--p-text); line-height:0.95; letter-spacing:-0.02em; margin-bottom:6px; }
-    .ph-hero-title .acc { color:var(--p-red); }
-    .ph-hero-sub { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--p-gold); margin-bottom:24px; display:block; }
+    /* HERO */
+    .hero { margin-top: 64px; background: #0a0d16; }
+    .hero-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; object-position: center; display: block; }
+    .hero-bottom { padding: 24px 20px 32px; }
+    .hero-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #c8102e; text-transform: uppercase; margin-bottom: 8px; display: block; }
+    .hero-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(44px, 8vw, 72px); font-weight: 800; color: #fff; line-height: 0.95; letter-spacing: -0.01em; margin-bottom: 10px; }
+    .hero-title em { color: #c8102e; font-style: normal; }
+    .hero-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.14em; color: #b87800; text-transform: uppercase; margin-bottom: 20px; display: block; }
+    .dtn { display: flex; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
+    .dtn-i { flex: 1; text-align: center; padding: 12px 6px; border-right: 1px solid rgba(255,255,255,0.08); }
+    .dtn-i:last-child { border-right: none; }
+    .dtn-v { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 800; color: #fff; line-height: 1; }
+    .dtn-v.red { color: #ff3a54; }
+    .dtn-n { display: block; font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.35); margin-top: 3px; letter-spacing: 0.06em; }
 
-    .dtn-strip { display:flex; background:var(--p-text); border-radius:var(--radius); overflow:hidden; margin-bottom:24px; }
-    .dtn-item { flex:1; text-align:center; padding:14px 8px; border-right:1px solid rgba(255,255,255,0.1); }
-    .dtn-item:last-child { border-right:none; }
-    .dtn-verb { display:block; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:800; color:#fff; line-height:1; }
-    .dtn-verb.r { color:#ff4060; }
-    .dtn-val { display:block; font-family:'Share Tech Mono',monospace; font-size:9px; color:rgba(255,255,255,0.45); letter-spacing:0.08em; margin-top:3px; }
+    /* LIGHT BODY */
+    .body { background: #f1f3f8; }
+    .qspecs { background: #fff; border-bottom: 1px solid #e0e4ed; display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .qspecs::-webkit-scrollbar { display: none; }
+    .qs-i { flex-shrink: 0; padding: 16px 20px; border-right: 1px solid #e0e4ed; text-align: center; min-width: 110px; }
+    .qs-i:last-child { border-right: none; }
+    .qs-v { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: #c8102e; line-height: 1; }
+    .qs-l { display: block; font-family: 'Share Tech Mono', monospace; font-size: 9px; color: #8a92a8; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
 
-    .key-specs { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:24px; }
-    .ks-item { background:var(--p-card); border:1px solid var(--p-border); border-radius:var(--radius); padding:13px 15px; }
-    .ks-label { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--p-muted); display:block; margin-bottom:3px; }
-    .ks-val { font-size:14px; font-weight:700; color:var(--p-text); line-height:1.2; }
-    .ks-val.r { color:var(--p-red); }
-    .ks-val.g { color:var(--p-gold); }
+    .sec { padding: 36px 20px; border-bottom: 1px solid #e0e4ed; }
+    .sec:last-of-type { border-bottom: none; }
+    .sec-inner { max-width: 800px; margin: 0 auto; }
+    .sec-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #c8102e; text-transform: uppercase; margin-bottom: 10px; display: block; }
+    .sec h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 800; color: #1a1f2e; line-height: 1.05; margin-bottom: 12px; }
+    .sec p { font-size: 15px; color: #4a5268; line-height: 1.75; margin-bottom: 10px; }
 
-    .ph-pills { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:28px; }
-    .ph-pill { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:0.08em; background:var(--p-redbg); border:1px solid rgba(200,16,46,0.2); color:var(--p-red); padding:5px 10px; border-radius:2px; }
+    /* Caps */
+    .caps { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .cap { background: #fff; border: 1px solid #e0e4ed; border-radius: 8px; padding: 18px; display: flex; gap: 14px; align-items: flex-start; }
+    .cap-n { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 800; color: #c8102e; min-width: 32px; line-height: 1; padding-top: 2px; }
+    .cap h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: #1a1f2e; margin-bottom: 4px; }
+    .cap p { font-size: 13px; color: #4a5268; line-height: 1.6; margin: 0; }
+    .cap-tag { display: inline-block; margin-top: 7px; font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.1em; background: #fef9ee; border: 1px solid rgba(154,100,0,0.25); color: #9a6400; padding: 3px 8px; border-radius: 2px; }
 
-    .ph-cta { display:flex; gap:10px; flex-wrap:wrap; }
-    .btn-dark { background:var(--p-text); color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:12px 24px; border-radius:var(--radius); display:inline-flex; align-items:center; gap:8px; transition:opacity 0.2s,transform 0.15s; }
-    .btn-dark:hover { opacity:0.85; transform:translateY(-1px); }
-    .btn-outline { background:transparent; color:var(--p-text); border:1.5px solid var(--p-border); font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:11px 24px; border-radius:var(--radius); display:inline-flex; align-items:center; gap:8px; transition:border-color 0.2s,transform 0.15s; }
-    .btn-outline:hover { border-color:var(--p-text); transform:translateY(-1px); }
+    /* Subsystems */
+    .subs { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+    .sub { background: #fff; border: 1px solid #e0e4ed; border-radius: 8px; overflow: hidden; }
+    .sub-head { background: #1a1f2e; padding: 12px 18px; display: flex; align-items: center; gap: 10px; }
+    .sub-head .ico { font-size: 16px; }
+    .sub-head h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; color: #fff; margin: 0; }
+    .sub-head .stag { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; }
+    .sub-rows { width: 100%; border-collapse: collapse; }
+    .sub-rows tr { border-bottom: 1px solid #f0f2f7; }
+    .sub-rows tr:last-child { border-bottom: none; }
+    .sub-rows td { padding: 9px 16px; font-size: 12.5px; line-height: 1.5; vertical-align: top; }
+    .sub-rows td:first-child { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: #8a92a8; width: 42%; background: #f8f9fc; border-right: 1px solid #eef0f6; }
+    .sub-rows td:last-child { color: #1a1f2e; font-weight: 500; }
+    .sub-rows tr:nth-child(even) td:last-child { background: #fafbfd; }
 
-    /* BODY */
-    .prod-body { background:var(--p-bg); }
-    .ps { padding:48px 40px; border-bottom:1px solid var(--p-border); max-width:700px; }
-    .ps:last-child { border-bottom:none; }
-    .ps-tag { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--p-red); margin-bottom:10px; display:block; }
-    .ps h2 { font-size:30px; font-weight:800; color:var(--p-text); margin-bottom:12px; line-height:1.1; }
-    .ps p { font-size:15px; color:var(--p-dim); line-height:1.75; margin-bottom:12px; }
+    /* Platform */
+    .plat { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .plat-i { background: #fff; border: 1px solid #e0e4ed; border-radius: 6px; padding: 12px 14px; }
+    .plat-l { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a92a8; display: block; margin-bottom: 3px; }
+    .plat-v { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; color: #1a1f2e; line-height: 1.2; }
+    .plat-v.r { color: #c8102e; }
 
-    .cap-grid { display:flex; flex-direction:column; gap:12px; margin-top:8px; }
-    .cap-card { background:var(--p-card); border:1px solid var(--p-border); border-radius:var(--radius-lg); padding:20px; display:flex; align-items:flex-start; gap:16px; transition:box-shadow 0.2s,border-color 0.2s; }
-    .cap-card:hover { box-shadow:0 4px 20px rgba(0,0,0,0.07); border-color:#c8d0e0; }
-    .cap-num { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:800; color:var(--p-red); min-width:34px; line-height:1; padding-top:2px; }
-    .cap-card h3 { font-size:15px; font-weight:700; color:var(--p-text); margin-bottom:4px; }
-    .cap-card p { font-size:13px; color:var(--p-dim); line-height:1.6; margin:0; }
-    .cap-badge { display:inline-block; margin-top:8px; font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:0.1em; background:var(--p-goldbg); border:1px solid rgba(154,100,0,0.25); color:var(--p-gold); padding:3px 8px; border-radius:2px; }
+    /* Form */
+    .form-wrap { background: #fff; border: 1px solid #e0e4ed; border-radius: 8px; padding: 24px; margin-top: 12px; }
+    .f-group { margin-bottom: 14px; }
+    .f-group label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8a92a8; margin-bottom: 6px; }
+    .f-group input, .f-group textarea { background: #f8f9fc; border: 1.5px solid #e0e4ed; color: #1a1f2e; border-radius: 4px; font-family: 'Barlow', sans-serif; font-size: 15px; padding: 11px 14px; width: 100%; outline: none; transition: border-color 0.2s; }
+    .f-group input:focus, .f-group textarea:focus { border-color: #c8102e; background: #fff; }
+    .f-group textarea { resize: vertical; min-height: 90px; }
+    .f-submit { background: #c8102e; color: #fff; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px; border: none; border-radius: 4px; width: 100%; cursor: pointer; transition: background 0.2s; }
+    .f-submit:hover { background: #e01030; }
+    .f-note { font-size: 13px; text-align: center; margin-top: 10px; min-height: 18px; }
 
-    .subsystem { background:var(--p-card); border:1px solid var(--p-border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:14px; }
-    .sub-hdr { background:var(--p-text); padding:13px 18px; display:flex; align-items:center; gap:12px; }
-    .sub-hdr h3 { font-size:14px; font-weight:700; color:#fff; margin:0; }
-    .sub-hdr .stag { font-family:'Share Tech Mono',monospace; font-size:9px; color:rgba(255,255,255,0.45); letter-spacing:0.1em; text-transform:uppercase; }
-    .sub-icon { font-size:18px; }
-    .sub-body table { width:100%; border-collapse:collapse; }
-    .sub-body tr { border-bottom:1px solid var(--p-border); }
-    .sub-body tr:last-child { border-bottom:none; }
-    .sub-body td { padding:10px 18px; font-size:13px; line-height:1.5; vertical-align:top; }
-    .sub-body td:first-child { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:0.05em; text-transform:uppercase; color:var(--p-muted); width:42%; background:#f8f9fc; border-right:1px solid var(--p-border); }
-    .sub-body td:last-child { color:var(--p-text); font-weight:500; }
-    .sub-body tr:nth-child(even) td:last-child { background:#fafbfd; }
+    /* Sticky CTA */
+    .sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; z-index: 90; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); border-top: 1px solid #e0e4ed; padding: 12px 16px; display: flex; gap: 10px; }
+    .sticky-cta a { flex: 1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 12px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .s-wa { background: transparent; border: 1.5px solid #e0e4ed; color: #1a1f2e; }
+    .s-req { background: #c8102e; color: #fff; }
 
-    .plat-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:12px; }
-    .plat-item { background:var(--p-card); border:1px solid var(--p-border); border-radius:var(--radius); padding:13px 15px; }
-    .plat-label { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--p-muted); display:block; margin-bottom:3px; }
-    .plat-val { font-size:13px; font-weight:700; color:var(--p-text); line-height:1.2; }
-    .plat-val.acc { color:var(--p-red); }
+    /* Footer */
+    .foot { background: #1a1f2e; padding: 24px 20px; text-align: center; }
+    .foot p { font-size: 12px; color: rgba(255,255,255,0.3); }
+    .foot a { color: rgba(255,255,255,0.4); }
 
-    .form-field { margin-bottom:14px; }
-    .form-field label { display:block; margin-bottom:6px; font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--p-muted); }
-    .form-field input, .form-field textarea { background:var(--p-card); border:1.5px solid var(--p-border); color:var(--p-text); border-radius:var(--radius); font-family:'Barlow',sans-serif; font-size:15px; padding:12px 14px; width:100%; outline:none; transition:border-color 0.2s; box-sizing:border-box; }
-    .form-field input:focus, .form-field textarea:focus { border-color:var(--p-red); }
-    .form-field textarea { resize:vertical; min-height:90px; }
-    .submit-btn { background:var(--p-red); color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:14px; border:none; border-radius:var(--radius); width:100%; cursor:pointer; transition:opacity 0.2s; }
-    .submit-btn:hover { opacity:0.88; }
-
-    /* STICKY MOBILE CTA */
-    .sticky-cta { position:fixed; bottom:0; left:0; right:0; z-index:50; background:rgba(255,255,255,0.96); backdrop-filter:blur(12px); border-top:1px solid var(--p-border); padding:12px 20px; display:flex; gap:10px; }
-    .sticky-cta a { flex:1; text-align:center; display:flex; align-items:center; justify-content:center; gap:7px; padding:12px; border-radius:var(--radius); font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; text-decoration:none; }
-    .sticky-wa { background:transparent; border:1.5px solid var(--p-border); color:var(--p-text); }
-    .sticky-req { background:var(--p-red); color:#fff; }
-
-    /* MOBILE */
-    @media (max-width:768px) {
-      .ph-split { grid-template-columns:1fr; min-height:auto; }
-      .ph-img-col { position:relative; top:0; height:72vw; max-height:360px; }
-      .ph-content-col { padding:28px 20px 100px; }
-      .ph-hero-title { font-size:52px; }
-      .ps { padding:32px 20px; max-width:100%; }
-    }
-    /* DESKTOP */
-    @media (min-width:1100px) {
-      .ph-split { grid-template-columns:460px 1fr; }
-      .ph-content-col { padding:64px 56px 120px; }
-      .cap-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-      .plat-grid { grid-template-columns:repeat(3,1fr); }
-      .sticky-cta { display:none; }
+    /* Desktop */
+    @media (min-width: 768px) {
+      .hero-bottom { padding: 32px 48px 40px; max-width: 860px; margin: 0 auto; }
+      .dtn-v { font-size: 20px; }
+      .qspecs { justify-content: center; }
+      .qs-i { min-width: 140px; padding: 20px 28px; }
+      .qs-v { font-size: 22px; }
+      .sec { padding: 56px 20px; }
+      .sec h2 { font-size: 34px; }
+      .caps { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .plat { grid-template-columns: repeat(3, 1fr); }
+      .sticky-cta { display: none; }
+      .sec:last-of-type { padding-bottom: 72px; }
     }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -125,226 +128,210 @@
 </head>
 <body>
 
-<nav id="navbar" style="background:rgba(8,11,18,0.97);backdrop-filter:blur(12px);">
-  <div class="prod-nav">
-    <a href="/" class="logo">
-      <img src="https://kp.idef.com.tr/storage/64226/Alfasis-Logo.png" alt="Alfasis Defense" class="logo-img" style="height:32px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
-      <span class="logo-text" style="display:none;font-size:16px;">ALFASIS <span class="logo-accent">DEFENSE</span></span>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="https://kp.idef.com.tr/storage/64226/Alfasis-Logo.png" alt="Alfasis Defense" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+      <span class="nav-logo-text">ALFASIS <em>DEFENSE</em></span>
     </a>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <a href="/" class="back-link">← All Products</a>
-      <a href="https://wa.me/905425288514" target="_blank" class="btn-primary" style="padding:8px 14px;font-size:12px;">WhatsApp</a>
+    <div class="nav-right">
+      <a href="/" class="nav-back">← All Products</a>
+      <a href="https://wa.me/905425288514" target="_blank" class="nav-wa">WhatsApp</a>
     </div>
   </div>
 </nav>
 
-<!-- SPLIT HERO -->
-<div class="ph-split">
-  <div class="ph-img-col">
-    <img src="assets/alfa-sentinel.png" alt="ALFA SENTINEL" />
-    <div class="ph-img-overlay"></div>
-  </div>
-  <div class="ph-content-col">
-    <span class="ph-system-tag">Mobile C-UAS Command Platform · Alfasis Defense</span>
-    <h1 class="ph-hero-title">ALFA<br/><span class="acc">SENTINEL</span></h1>
-    <span class="ph-hero-sub">Detect · Track · Neutralize</span>
-
-    <div class="dtn-strip">
-      <div class="dtn-item"><span class="dtn-verb">DETECT</span><span class="dtn-val">≤10s response</span></div>
-      <div class="dtn-item"><span class="dtn-verb">TRACK</span><span class="dtn-val">≤10m accuracy</span></div>
-      <div class="dtn-item"><span class="dtn-verb r">NEUTRALIZE</span><span class="dtn-val">850W RF power</span></div>
-    </div>
-
-    <div class="key-specs">
-      <div class="ks-item"><span class="ks-label">RF Detection</span><span class="ks-val r">70MHz – 6GHz</span></div>
-      <div class="ks-item"><span class="ks-label">Jamming</span><span class="ks-val r">430MHz – 6GHz</span></div>
-      <div class="ks-item"><span class="ks-label">Drone Range</span><span class="ks-val g">≥ 5 km</span></div>
-      <div class="ks-item"><span class="ks-label">Direction Acc.</span><span class="ks-val g">≤ ±15°</span></div>
-      <div class="ks-item"><span class="ks-label">Encryption</span><span class="ks-val">AES-256</span></div>
-      <div class="ks-item"><span class="ks-label">Platform</span><span class="ks-val">MB Sprinter 519</span></div>
-    </div>
-
-    <div class="ph-pills">
-      <span class="ph-pill">RF Detection</span><span class="ph-pill">Drone Jamming</span>
-      <span class="ph-pill">EO/IR Thermal</span><span class="ph-pill">AES-256 C2</span>
-      <span class="ph-pill">6× Hydraulic Stabilizers</span><span class="ph-pill">12 kW Generator</span>
-      <span class="ph-pill">3 Operator Stations</span>
-    </div>
-
-    <div class="ph-cta">
-      <a href="#contact" class="btn-dark">Request Consultation</a>
-      <a href="https://wa.me/905425288514?text=ALFA%20SENTINEL%20inquiry" target="_blank" class="btn-outline">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        WhatsApp
-      </a>
+<section class="hero">
+  <img src="assets/alfa-sentinel.webp" alt="ALFA SENTINEL Mobile Counter-UAS Command Platform" class="hero-img" />
+  <div class="hero-bottom">
+    <span class="hero-tag">Mobile C-UAS Command Platform · Alfasis Defense</span>
+    <h1 class="hero-title">ALFA<br/><em>SENTINEL</em></h1>
+    <span class="hero-sub">Detect · Track · Neutralize</span>
+    <div class="dtn">
+      <div class="dtn-i"><span class="dtn-v">DETECT</span><span class="dtn-n">≤10s · 5km</span></div>
+      <div class="dtn-i"><span class="dtn-v">TRACK</span><span class="dtn-n">≤±15° · ≤10m</span></div>
+      <div class="dtn-i"><span class="dtn-v red">NEUTRALIZE</span><span class="dtn-n">850W RF</span></div>
     </div>
   </div>
+</section>
+
+<div class="body">
+
+<div class="qspecs">
+  <div class="qs-i"><span class="qs-v">70MHz–6GHz</span><span class="qs-l">RF Detection</span></div>
+  <div class="qs-i"><span class="qs-v">430–6GHz</span><span class="qs-l">Jamming</span></div>
+  <div class="qs-i"><span class="qs-v">850W</span><span class="qs-l">RF Power</span></div>
+  <div class="qs-i"><span class="qs-v">≥5km</span><span class="qs-l">Drone Range</span></div>
+  <div class="qs-i"><span class="qs-v">≤10m</span><span class="qs-l">GPS Accuracy</span></div>
+  <div class="qs-i"><span class="qs-v">AES-256</span><span class="qs-l">Encryption</span></div>
+  <div class="qs-i"><span class="qs-v">Sprinter 519</span><span class="qs-l">Platform</span></div>
 </div>
 
-<!-- BODY -->
-<div class="prod-body">
-
-  <div class="ps">
-    <span class="ps-tag">System Overview</span>
+<div class="sec">
+  <div class="sec-inner">
+    <span class="sec-tag">System Overview</span>
     <h2>One vehicle. Full-spectrum counter-UAS.</h2>
-    <p>ALFA SENTINEL is a self-sufficient mobile command and control platform built on a Mercedes-Benz Sprinter 519 chassis. It integrates RF detection, drone jamming, electro-optical tracking, encrypted communications, and operator infrastructure into a single deployable unit.</p>
-    <p>Operates independently of external infrastructure — carrying its own power generation, climate control, and mission systems into any field environment.</p>
+    <p>ALFA SENTINEL is a self-sufficient mobile command platform built on a Mercedes-Benz Sprinter 519 chassis. It integrates RF detection, drone jamming, electro-optical tracking, encrypted communications, and operator command infrastructure into a single deployable unit.</p>
+    <p>The platform operates independently of external infrastructure — carrying its own power generation, climate control, and mission systems into any field environment.</p>
   </div>
-
-  <div class="ps">
-    <span class="ps-tag">Core Capabilities</span>
-    <h2>Four integrated systems.</h2>
-    <div class="cap-grid">
-      <div class="cap-card">
-        <div class="cap-num">01</div>
-        <div><h3>RF Detection & Signal Analysis</h3><p>Full-band 70MHz–6GHz scanning. Detects mainstream drones and FPV at ≥5km. Identifies model, SN, take-off point, return point, and real-time trajectory in ≤10 seconds.</p><span class="cap-badge">ALFADET System</span></div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-num">02</div>
-        <div><h3>Drone-UAV Jamming</h3><p>850W total RF output across 430MHz–6GHz. Blocks all GNSS transmitters and control links with 360° omnidirectional coverage. Operating range -15°C to +65°C.</p><span class="cap-badge">ALFA 850V Mobile</span></div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-num">03</div>
-        <div><h3>EO/IR Visual Tracking</h3><p>4MP optical + thermal bi-spectrum PTZ. Pan 360° continuous, tilt ±85°. 56× optical zoom, laser range up to 2,000m. Fire and smoke detection. Day and night.</p><span class="cap-badge">Thermal + Optical PTZ</span></div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-num">04</div>
-        <div><h3>Encrypted C2 Communications</h3><p>AES-256 site-to-site VPN over VSAT/LTE/4G. Secure voice, video conference, radio-over-IP, public announcement. EvaGate Core with redundant multi-link connectivity.</p><span class="cap-badge">AES-256 · Multi-Link</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="ps">
-    <span class="ps-tag">Technical Specifications</span>
-    <h2>Full system specs.</h2>
-
-    <div class="subsystem">
-      <div class="sub-hdr"><span class="sub-icon">📡</span><div><div class="stag">RF Detection</div><h3>ALFADET — Signal Analysis System</h3></div></div>
-      <div class="sub-body"><table>
-        <tr><td>Detection Bands</td><td>70MHz – 6GHz full band scanning</td></tr>
-        <tr><td>Key Frequencies</td><td>433 / 530 / 750 / 800 / 900MHz · 1.2 / 1.4 / 2.4 / 5.2 / 5.8GHz</td></tr>
-        <tr><td>Detection Range</td><td>Mainstream drones ≥5km · FPV ≥5km</td></tr>
-        <tr><td>DID / RID Locate</td><td>DID ≥10km · RID ≥3km</td></tr>
-        <tr><td>Coverage</td><td>Horizontal 360° · Vertical -90° to +90°</td></tr>
-        <tr><td>Response Time</td><td>≤10s (power-on to detection)</td></tr>
-        <tr><td>Direction Accuracy</td><td>≤±15° RMS</td></tr>
-        <tr><td>Location Accuracy</td><td>≤10m</td></tr>
-        <tr><td>FPV Video</td><td>500MHz–6GHz · ≥1.5km capture radius</td></tr>
-        <tr><td>Detection Display</td><td>Distance · Altitude · Speed · GPS · Model · SN · Take-off · Trajectory</td></tr>
-        <tr><td>Supported Models</td><td>All DJI series · Selected Autel models</td></tr>
-        <tr><td>Weight / Dims</td><td>≤18 kg · Ø400×516 mm · -40°C to +60°C</td></tr>
-      </table></div>
-    </div>
-
-    <div class="subsystem">
-      <div class="sub-hdr"><span class="sub-icon">⚡</span><div><div class="stag">Jamming System</div><h3>ALFA 850V Mobile — Drone-UAV Jammer</h3></div></div>
-      <div class="sub-body"><table>
-        <tr><td>Jamming Bands</td><td>430MHz – 6GHz</td></tr>
-        <tr><td>Total RF Power</td><td>850W</td></tr>
-        <tr><td>Coverage</td><td>360° Omnidirectional</td></tr>
-        <tr><td>Antenna Gain</td><td>Min. 9 dBi</td></tr>
-        <tr><td>GNSS Blocking</td><td>All GNSS transmitters + protected receivers</td></tr>
-        <tr><td>Power Supply</td><td>AC 190–250V · ≤2kW consumption</td></tr>
-        <tr><td>Dimensions</td><td>W:90 × H:45 × L:152 cm · ≤90 kg</td></tr>
-        <tr><td>Temperature</td><td>-15°C to +65°C (no external cooling required)</td></tr>
-        <tr><td>Interface</td><td>RJ-45 Ethernet · RS-232/422 (optional)</td></tr>
-      </table></div>
-    </div>
-
-    <div class="subsystem">
-      <div class="sub-hdr"><span class="sub-icon">🎯</span><div><div class="stag">Visual Tracking</div><h3>EO/IR Electro-Optical & Thermal System</h3></div></div>
-      <div class="sub-body"><table>
-        <tr><td>Thermal Sensor</td><td>VOx Uncooled 384×288 · 12μm · NETD ≤20mK</td></tr>
-        <tr><td>Optical Sensor</td><td>4MP CMOS · 2688×1520 · 56× optical zoom</td></tr>
-        <tr><td>Focal Length</td><td>6–336mm</td></tr>
-        <tr><td>PTZ Range</td><td>Pan 360° continuous · Tilt -85° to +85°</td></tr>
-        <tr><td>Laser Distance</td><td>Up to 2,000m</td></tr>
-        <tr><td>Fire Detection</td><td>Up to 10 simultaneous points</td></tr>
-        <tr><td>Smoke Detection</td><td>Up to 6km · 5m×5m smoke cloud</td></tr>
-        <tr><td>Night Operation</td><td>0 Lux with IR · WDR 120dB</td></tr>
-        <tr><td>Standard</td><td>NEMA-4X · Anti-corrosion coating</td></tr>
-      </table></div>
-    </div>
-
-    <div class="subsystem">
-      <div class="sub-hdr"><span class="sub-icon">🔐</span><div><div class="stag">Communications</div><h3>EvaGate Core — Encrypted C2 Network</h3></div></div>
-      <div class="sub-body"><table>
-        <tr><td>Encryption</td><td>AES-256 end-to-end</td></tr>
-        <tr><td>Connectivity</td><td>VSAT · LTE/4G · L-Band · Fiber</td></tr>
-        <tr><td>VPN</td><td>Redundant site-to-site (X/Ku/Ka Band)</td></tr>
-        <tr><td>Voice / Video</td><td>Secure phone · Video conference · PA system</td></tr>
-        <tr><td>Radio</td><td>Radio-over-IP · Patching · L-Band PTT</td></tr>
-        <tr><td>Streaming</td><td>H.264/265/266 bidirectional</td></tr>
-      </table></div>
-    </div>
-  </div>
-
-  <div class="ps">
-    <span class="ps-tag">Carrier Platform</span>
-    <h2>Mercedes-Benz Sprinter 519.</h2>
-    <p>Self-sufficient mobile platform with independent power generation, climate control, and hydraulic stabilization for stationary field operations.</p>
-    <div class="plat-grid">
-      <div class="plat-item"><span class="plat-label">Chassis</span><span class="plat-val">Sprinter 519 L4 High Roof</span></div>
-      <div class="plat-item"><span class="plat-label">Max GVW</span><span class="plat-val acc">5,000 kg</span></div>
-      <div class="plat-item"><span class="plat-label">Generator</span><span class="plat-val">~12 kW Marine Low-Noise</span></div>
-      <div class="plat-item"><span class="plat-label">Stabilization</span><span class="plat-val acc">6× Hydraulic Legs</span></div>
-      <div class="plat-item"><span class="plat-label">Operator Seats</span><span class="plat-val">3× 360° Rotating</span></div>
-      <div class="plat-item"><span class="plat-label">Monitors</span><span class="plat-val acc">6× Industrial Grade</span></div>
-      <div class="plat-item"><span class="plat-label">Alternator</span><span class="plat-val">14V / 250A High-Cap.</span></div>
-      <div class="plat-item"><span class="plat-label">Climate</span><span class="plat-val">Webasto RTC 140 A/C</span></div>
-      <div class="plat-item"><span class="plat-label">Mast</span><span class="plat-val acc">6m · 7-Section · 200kg</span></div>
-      <div class="plat-item"><span class="plat-label">Energy Mode</span><span class="plat-val">Silent Battery + Auto Gen.</span></div>
-      <div class="plat-item"><span class="plat-label">Insulation</span><span class="plat-val">Fire-retardant · Acoustic</span></div>
-      <div class="plat-item"><span class="plat-label">Floor</span><span class="plat-val">15mm Marine + Anti-slip</span></div>
-    </div>
-  </div>
-
-  <div class="ps" id="contact">
-    <span class="ps-tag">Request Information</span>
-    <h2>Evaluate ALFA SENTINEL.</h2>
-    <p>Share your operational requirements — deployment context, threat environment, and configuration needs. We respond within 24 hours.</p>
-    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" id="sentinelForm" style="margin-top:20px;">
-      <input type="hidden" name="_subject" value="ALFA SENTINEL Inquiry" />
-      <input type="hidden" name="product" value="ALFA SENTINEL" />
-      <div class="form-field"><label>Full Name *</label><input type="text" name="name" required /></div>
-      <div class="form-field"><label>Organization / Country *</label><input type="text" name="organization" required /></div>
-      <div class="form-field"><label>Email Address *</label><input type="email" name="email" required /></div>
-      <div class="form-field"><label>Message</label><textarea name="message" rows="3" placeholder="Mission profile, deployment requirements..."></textarea></div>
-      <button type="submit" class="submit-btn" id="sentinelSubmitBtn">Send Inquiry</button>
-      <p id="sentinelFormNote" style="font-size:13px;text-align:center;margin-top:10px;min-height:18px;"></p>
-    </form>
-  </div>
-
 </div>
 
-<footer style="background:var(--p-bg);border-top:1px solid var(--p-border);padding:24px 20px;">
-  <div style="max-width:700px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-    <img src="https://kp.idef.com.tr/storage/64226/Alfasis-Logo.png" alt="Alfasis Defense" style="height:26px;" onerror="this.style.display:'none'" />
-    <p style="font-size:12px;color:var(--p-muted);margin:0;">© 2025 Alfasis Savunma Mühendislik A.Ş. · <a href="/privacy.html" style="color:var(--p-muted)">Privacy</a> · <a href="/" style="color:var(--p-muted)">alfasisdefense.com</a></p>
+<div class="sec">
+  <div class="sec-inner">
+    <span class="sec-tag">Core Capabilities</span>
+    <h2>Four integrated systems.</h2>
+    <div class="caps">
+      <div class="cap"><div class="cap-n">01</div><div><h3>RF Detection & Signal Analysis</h3><p>Full-band 70MHz–6GHz scanning. Detects drones at ≥5km. Identifies model, SN, take-off point, return point, and real-time trajectory in ≤10 seconds.</p><span class="cap-tag">ALFADET System</span></div></div>
+      <div class="cap"><div class="cap-n">02</div><div><h3>Drone-UAV Jamming</h3><p>850W total RF output across 430MHz–6GHz. Blocks all GNSS transmitters and control links with 360° omnidirectional coverage. -15°C to +65°C operating range.</p><span class="cap-tag">ALFA 850V Mobile</span></div></div>
+      <div class="cap"><div class="cap-n">03</div><div><h3>EO/IR Visual Tracking</h3><p>4MP optical + thermal bi-spectrum PTZ. Pan 360° continuous, tilt ±85°. 56× zoom, laser to 2,000m. Fire & smoke detection. Day and night.</p><span class="cap-tag">Thermal + Optical PTZ</span></div></div>
+      <div class="cap"><div class="cap-n">04</div><div><h3>Encrypted C2 Communications</h3><p>AES-256 site-to-site VPN over VSAT/LTE/4G. Secure voice, video conference, radio-over-IP, public announcement system.</p><span class="cap-tag">AES-256 · Multi-Link</span></div></div>
+    </div>
   </div>
-</footer>
+</div>
+
+<div class="sec">
+  <div class="sec-inner">
+    <span class="sec-tag">Technical Specifications</span>
+    <h2>Full system specs.</h2>
+    <div class="subs">
+
+      <div class="sub">
+        <div class="sub-head"><span class="ico">📡</span><div><div class="stag">RF DETECTION</div><h3>ALFADET — Signal Analysis System</h3></div></div>
+        <table class="sub-rows">
+          <tr><td>Detection Bands</td><td>70MHz – 6GHz full band scanning</td></tr>
+          <tr><td>Key Frequencies</td><td>433 / 530 / 750 / 800 / 900MHz · 1.2 / 1.4 / 2.4 / 5.2 / 5.8GHz</td></tr>
+          <tr><td>Detection Range</td><td>Mainstream drones ≥5km · FPV ≥5km</td></tr>
+          <tr><td>DID / RID Locate</td><td>DID ≥10km · RID ≥3km</td></tr>
+          <tr><td>Coverage</td><td>Horizontal 360° · Vertical -90° to +90°</td></tr>
+          <tr><td>Response Time</td><td>≤10s (power-on to detection)</td></tr>
+          <tr><td>Direction Accuracy</td><td>≤±15° RMS</td></tr>
+          <tr><td>Location Accuracy</td><td>≤10m</td></tr>
+          <tr><td>FPV Analog Video</td><td>500MHz – 6GHz · ≥1.5km capture</td></tr>
+          <tr><td>Drone Models</td><td>All DJI series · Selected Autel models</td></tr>
+          <tr><td>Detection Display</td><td>Distance · Altitude · Speed · GPS · Model · SN · Trajectory</td></tr>
+          <tr><td>Power / Weight</td><td>AC 220V · ≤18kg · Ø400×516mm</td></tr>
+          <tr><td>Temperature</td><td>-40°C to +60°C</td></tr>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-head"><span class="ico">⚡</span><div><div class="stag">JAMMING SYSTEM</div><h3>ALFA 850V Mobile — Drone-UAV Jammer</h3></div></div>
+        <table class="sub-rows">
+          <tr><td>Jamming Bands</td><td>430MHz – 6GHz</td></tr>
+          <tr><td>Total RF Power</td><td>850W</td></tr>
+          <tr><td>Coverage</td><td>360° Omnidirectional</td></tr>
+          <tr><td>Antenna Gain</td><td>Min. 9 dBi</td></tr>
+          <tr><td>GNSS Blocking</td><td>All GNSS + protected receivers</td></tr>
+          <tr><td>Power Supply</td><td>AC 190–250V · ≤2kW consumption</td></tr>
+          <tr><td>Dimensions</td><td>W:90 × H:45 × L:152 cm · ≤90kg</td></tr>
+          <tr><td>Temperature</td><td>-15°C to +65°C (no external cooling)</td></tr>
+          <tr><td>Interface</td><td>RJ-45 Ethernet 100Mbps · RS-232/422</td></tr>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-head"><span class="ico">🎯</span><div><div class="stag">VISUAL TRACKING</div><h3>EO/IR Electro-Optical & Thermal System</h3></div></div>
+        <table class="sub-rows">
+          <tr><td>Thermal Sensor</td><td>VOx Uncooled 384×288 · 12μm · NETD ≤20mK</td></tr>
+          <tr><td>Optical Sensor</td><td>4MP CMOS · 2688×1520 · 56× optical zoom</td></tr>
+          <tr><td>Focal Length</td><td>6–336mm</td></tr>
+          <tr><td>Pan / Tilt</td><td>360° continuous · -85° to +85° auto-flip</td></tr>
+          <tr><td>Laser Distance</td><td>Up to 2,000m</td></tr>
+          <tr><td>Fire Detection</td><td>Dynamic · up to 10 simultaneous points</td></tr>
+          <tr><td>Smoke Detection</td><td>Up to 6km · 5×5m smoke cloud</td></tr>
+          <tr><td>Night Vision</td><td>0 Lux with IR · 0.0002 Lux B/W</td></tr>
+          <tr><td>WDR</td><td>120 dB</td></tr>
+          <tr><td>Standard</td><td>NEMA-4X · Anti-corrosion coating</td></tr>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-head"><span class="ico">🔐</span><div><div class="stag">COMMUNICATIONS</div><h3>EvaGate Core — Encrypted C2 Network</h3></div></div>
+        <table class="sub-rows">
+          <tr><td>Encryption</td><td>AES-256 end-to-end</td></tr>
+          <tr><td>Connectivity</td><td>VSAT · LTE/4G · L-Band · Fiber</td></tr>
+          <tr><td>VPN</td><td>Redundant site-to-site (X/Ku/Ka Band)</td></tr>
+          <tr><td>Voice</td><td>Secure phone · Video conference · PA system</td></tr>
+          <tr><td>Radio</td><td>Radio-over-IP · Radio patching · L-Band PTT</td></tr>
+          <tr><td>Video</td><td>H.264/265/266 bidirectional streaming</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-inner">
+    <span class="sec-tag">Carrier Platform</span>
+    <h2>Mercedes-Benz Sprinter 519.</h2>
+    <p>Self-sufficient mobile command vehicle with independent power generation, climate control, and hydraulic stabilization. Operates fully independently of external infrastructure.</p>
+    <div class="plat">
+      <div class="plat-i"><span class="plat-l">Chassis</span><span class="plat-v">Sprinter 519 L4 High Roof</span></div>
+      <div class="plat-i"><span class="plat-l">Max GVW</span><span class="plat-v r">5,000 kg</span></div>
+      <div class="plat-i"><span class="plat-l">Generator</span><span class="plat-v">~12 kW Marine Low-Noise</span></div>
+      <div class="plat-i"><span class="plat-l">Stabilization</span><span class="plat-v r">6× Hydraulic Legs</span></div>
+      <div class="plat-i"><span class="plat-l">Operator Seats</span><span class="plat-v">3× 360° Rotating</span></div>
+      <div class="plat-i"><span class="plat-l">Monitors</span><span class="plat-v r">6× Industrial Grade</span></div>
+      <div class="plat-i"><span class="plat-l">Alternator</span><span class="plat-v">14V / 250A</span></div>
+      <div class="plat-i"><span class="plat-l">Climate</span><span class="plat-v">Webasto RTC 140</span></div>
+      <div class="plat-i"><span class="plat-l">Mast</span><span class="plat-v r">6m · 200kg Payload</span></div>
+      <div class="plat-i"><span class="plat-l">Energy Mgmt</span><span class="plat-v">Battery + Auto-Start Gen</span></div>
+      <div class="plat-i"><span class="plat-l">Insulation</span><span class="plat-v">Fire + Acoustic + Thermal</span></div>
+      <div class="plat-i"><span class="plat-l">Floor</span><span class="plat-v">15mm Marine Plywood</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec" id="contact">
+  <div class="sec-inner">
+    <span class="sec-tag">Request Information</span>
+    <h2>Evaluate ALFA SENTINEL for your mission.</h2>
+    <p>Share your operational requirements and deployment context. We respond within 24 hours.</p>
+    <div class="form-wrap">
+      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" id="sentinelForm">
+        <input type="hidden" name="_subject" value="ALFA SENTINEL Inquiry" />
+        <input type="hidden" name="product" value="ALFA SENTINEL" />
+        <div class="f-group"><label>Full Name *</label><input type="text" name="name" required /></div>
+        <div class="f-group"><label>Organization / Country *</label><input type="text" name="organization" required /></div>
+        <div class="f-group"><label>Email Address *</label><input type="email" name="email" required /></div>
+        <div class="f-group"><label>Message</label><textarea name="message" placeholder="Mission profile, deployment requirements..."></textarea></div>
+        <button type="submit" class="f-submit" id="sentinelBtn">Send Inquiry</button>
+        <p class="f-note" id="sentinelNote"></p>
+      </form>
+    </div>
+  </div>
+</div>
+
+</div><!-- /body -->
 
 <div class="sticky-cta">
-  <a href="https://wa.me/905425288514?text=ALFA%20SENTINEL%20inquiry" target="_blank" class="sticky-wa">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <a href="https://wa.me/905425288514?text=ALFA%20SENTINEL%20inquiry" target="_blank" class="s-wa">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     WhatsApp
   </a>
-  <a href="#contact" class="sticky-req">Request Info</a>
+  <a href="#contact" class="s-req">Request Consultation</a>
 </div>
 
+<footer class="foot">
+  <p>© 2025 Alfasis Savunma Mühendislik A.Ş. &nbsp;·&nbsp; <a href="/">alfasisdefense.com</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy Policy</a></p>
+</footer>
+
 <script>
-window.addEventListener('scroll',()=>{ document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20); });
-document.getElementById('sentinelForm').addEventListener('submit',async function(e){
+document.getElementById('sentinelForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  const btn=document.getElementById('sentinelSubmitBtn');
-  const note=document.getElementById('sentinelFormNote');
-  btn.textContent='Sending...'; btn.disabled=true;
+  const btn = document.getElementById('sentinelBtn');
+  const note = document.getElementById('sentinelNote');
+  btn.textContent = 'Sending...'; btn.disabled = true;
   try {
-    const res=await fetch(this.action,{method:'POST',body:new FormData(this),headers:{'Accept':'application/json'}});
-    if(res.ok){note.textContent='✓ Received. We respond within 24 hours.';note.style.color='#16a34a';this.reset();if(typeof gtag!=='undefined')gtag('event','form_submit',{event_category:'lead',event_label:'alfa_sentinel'});}
-    else throw new Error();
-  } catch { note.textContent='Error — please email info@alfasisdefense.com'; note.style.color='#dc2626'; }
-  btn.textContent='Send Inquiry'; btn.disabled=false;
+    const res = await fetch(this.action, { method:'POST', body:new FormData(this), headers:{'Accept':'application/json'} });
+    if (res.ok) {
+      note.textContent = '✓ Received. We will respond within 24 hours.';
+      note.style.color = '#16a34a'; this.reset();
+      if (typeof gtag !== 'undefined') gtag('event','form_submit',{event_category:'lead',event_label:'alfa_sentinel'});
+    } else throw new Error();
+  } catch { note.textContent = 'Error. Please email info@alfasisdefense.com'; note.style.color = '#dc2626'; }
+  btn.textContent = 'Send Inquiry'; btn.disabled = false;
 });
 </script>
 </body>
