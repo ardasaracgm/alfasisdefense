@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ALFA 850V Mobile | Vehicle-Mounted Counter-UAV Jammer | Alfasis Defense</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f3f4f6;color:#111827;line-height:1.7}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+
+:root{--red:#e30613;--dark:#07101b;--text:#374151}
+
+.nav{
+height:70px;background:#07101b;color:#fff;display:flex;align-items:center;
+justify-content:space-between;padding:0 55px;border-bottom:1px solid rgba(255,255,255,.08)
+}
+.logo{font-family:'Barlow Condensed';font-size:34px;font-weight:800;letter-spacing:.08em}
+.logo small{display:block;font-size:10px;letter-spacing:.22em;margin-top:-8px}
+.nav-right{display:flex;gap:28px;align-items:center;font-family:'Barlow Condensed';font-size:14px;font-weight:700}
+.btn{background:var(--red);color:#fff;padding:13px 24px;border-radius:2px}
+
+.hero{
+position:relative;height:520px;background:
+linear-gradient(90deg,rgba(5,10,18,.94) 0%,rgba(5,10,18,.75) 38%,rgba(5,10,18,.08) 100%),
+url('assets/alfa-850v-mobile-hero.webp') center/cover no-repeat;
+display:flex;align-items:center;padding:0 58px;color:#fff;overflow:hidden
+}
+.hero h5{color:#ff1f2d;font-size:18px;font-weight:800;letter-spacing:.05em;margin-bottom:12px}
+.hero h1{font-family:'Barlow Condensed';font-size:96px;line-height:.86;font-weight:800}
+.hero h2{font-family:'Barlow Condensed';font-size:39px;margin-top:18px}
+.redline{width:130px;height:4px;background:var(--red);margin:24px 0}
+.hero h3{font-family:'Barlow Condensed';font-size:26px;letter-spacing:.08em}
+.hero h3 span{color:var(--red)}
+.hero p{font-size:18px;line-height:1.65;margin-top:22px;max-width:540px;color:#e5e7eb}
+
+.specbar{background:#07101b;color:#fff;display:grid;grid-template-columns:repeat(5,1fr);padding:24px 48px;gap:18px}
+.spec{display:flex;gap:15px;align-items:center;border-right:1px solid rgba(255,255,255,.18)}
+.spec:last-child{border-right:0}
+.ico{width:48px;height:48px;border:1px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Barlow Condensed'}
+.spec b{display:block;font-family:'Barlow Condensed';font-size:17px}
+.spec span{font-size:13px;color:#cbd5e1}
+
+.section{padding:44px 58px}
+.section-title{font-family:'Barlow Condensed';font-size:24px;color:var(--red);margin-bottom:22px;font-weight:800}
+.overview{display:grid;grid-template-columns:1.1fr 1fr;gap:70px;border-bottom:1px solid #d7dce3;padding-bottom:45px}
+.overview p{font-size:16px;line-height:1.75;color:var(--text);margin-bottom:20px}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.feature{display:grid;grid-template-columns:44px 1fr;gap:15px}
+.feature strong{display:block;font-family:'Barlow Condensed';font-size:18px;color:#111827}
+.feature span{font-size:14px;color:#374151;line-height:1.55}
+
+.cap-wrap{display:grid;grid-template-columns:1fr 290px;gap:45px;align-items:end;border-bottom:1px solid #d7dce3;padding-bottom:35px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.card{background:#eef0f4;padding:22px 18px;min-height:155px}
+.num{background:var(--red);color:#fff;font-family:'Barlow Condensed';font-size:22px;font-weight:800;padding:5px 9px;display:inline-block;margin-bottom:15px}
+.card h4{font-family:'Barlow Condensed';font-size:18px;margin-bottom:12px}
+.card p{font-size:13px;line-height:1.6;color:#374151}
+
+.bottom-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:55px}
+table{width:100%;border-collapse:collapse;background:#f9fafb}
+td{border:1px solid #d9dde4;padding:10px 18px;font-size:14px;line-height:1.55;color:#1f2937}
+td:first-child{font-weight:800;font-family:'Barlow Condensed';width:37%;color:#111827}
+.note{font-size:12px;color:#6b7280;margin-top:13px}
+
+.scenario{display:grid;grid-template-columns:190px 1fr;background:#eceef2;margin-bottom:7px}
+.scenario img{height:105px;width:100%;object-fit:cover}
+.scenario div{padding:18px}
+.scenario h4{font-family:'Barlow Condensed';font-size:21px}
+.scenario p{font-size:14px;line-height:1.45;color:#374151}
+
+.cta{background:#07101b;color:#fff;display:grid;grid-template-columns:1.1fr .9fr;gap:55px;padding:50px 58px}
+.cta h2{font-family:'Barlow Condensed';font-size:36px;line-height:1.1}
+.cta p{color:#d1d5db;font-size:16px}
+.form h3{font-family:'Barlow Condensed';color:#ff1f2d;margin-bottom:15px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input,textarea{width:100%;padding:14px;border:none;margin-bottom:10px;font-family:'Inter'}
+textarea{height:78px}
+button{background:var(--red);color:#fff;border:none;padding:14px 28px;font-family:'Barlow Condensed';font-size:17px;font-weight:800;cursor:pointer}
+
+@media(max-width:900px){
+.nav{padding:0 22px}.hero{padding:40px 24px;height:560px}.hero h1{font-size:72px}.hero h2{font-size:31px}
+.specbar,.overview,.cap-wrap,.bottom-grid,.cta{grid-template-columns:1fr}
+.specbar{padding:20px}.spec{border-right:0;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:14px}
+.cards{grid-template-columns:1fr 1fr}.section{padding:36px 24px}.cta{padding:38px 24px}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+  <div class="logo">ALFASIS<small>COUNTER-UAV TECHNOLOGIES</small></div>
+  <div class="nav-right">
+    <a href="/">← BACK TO PRODUCTS</a>
+    <a class="btn" href="#contact">CONTACT US ›</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <h5>VEHICLE-MOUNTED COUNTER-UAV JAMMER</h5>
+    <h1>ALFA<br>850V MOBILE</h1>
+    <h2>DRONE-UAV JAMMER SYSTEM</h2>
+    <div class="redline"></div>
+    <h3>MOVE. <span>JAM.</span> PROTECT.</h3>
+    <p>Vehicle-integrated RF jamming system engineered for convoy protection, mobile patrols and tactical deployments.</p>
+  </div>
+</section>
+
+<div class="specbar">
+  <div class="spec"><div class="ico">430</div><div><b>WIDE RF COVERAGE</b><span>430 MHz – 6 GHz</span></div></div>
+  <div class="spec"><div class="ico">850W</div><div><b>TOTAL RF OUTPUT</b><span>Mission-grade suppression</span></div></div>
+  <div class="spec"><div class="ico">360°</div><div><b>MOBILE PROTECTION</b><span>60° elevation coverage</span></div></div>
+  <div class="spec"><div class="ico">3s</div><div><b>RAPID ACTIVATION</b><span>Full output in seconds</span></div></div>
+  <div class="spec"><div class="ico">IP</div><div><b>ROOF-MOUNT ENCLOSURE</b><span>Vehicle-integrated system</span></div></div>
+</div>
+
+<section class="section overview">
+  <div>
+    <h3 class="section-title">SYSTEM OVERVIEW</h3>
+    <p>ALFA 850V Mobile is a vehicle-mounted counter-UAV jammer system designed for mobile operations, convoys and tactical deployments. The system is housed in a ruggedized roof-mount enclosure and integrates directly onto tactical vehicles, SUVs and pickups.</p>
+    <p>It provides continuous counter-UAV protection across the 430 MHz to 6 GHz spectrum with 850 W total RF output, targeting UAV control links, GNSS, telemetry and video transmission simultaneously.</p>
+  </div>
+
+  <div class="features">
+    <div class="feature"><div>🚙</div><div><strong>Vehicle Roof-Mount Integration</strong><span>Ruggedized enclosure for roof rack mounting without structural modification.</span></div></div>
+    <div class="feature"><div>📡</div><div><strong>360° Mobile Coverage</strong><span>High-gain omnidirectional antennas with 60° elevation protection.</span></div></div>
+    <div class="feature"><div>⚡</div><div><strong>3-Second Activation</strong><span>Fast reaction for developing drone threat scenarios.</span></div></div>
+    <div class="feature"><div>🛰</div><div><strong>Anti-GNSS Blocking</strong><span>Designed to disrupt GNSS transmitters and protected receivers.</span></div></div>
+    <div class="feature"><div>▥</div><div><strong>Per-Band Architecture</strong><span>Separate signal and power systems allow independent band control.</span></div></div>
+    <div class="feature"><div>🖥</div><div><strong>Remote Management</strong><span>Optional RMS software enables monitoring and multi-unit control.</span></div></div>
+  </div>
+</section>
+
+<section class="section cap-wrap">
+  <div>
+    <h3 class="section-title">CORE CAPABILITIES</h3>
+    <div class="cards">
+      <div class="card"><span class="num">01</span><h4>MOBILE RF DENIAL</h4><p>Provides continuous UAV suppression while the vehicle is stationary or moving.</p></div>
+      <div class="card"><span class="num">02</span><h4>BROAD FREQUENCY COVERAGE</h4><p>Targets UAV control, telemetry, GNSS and video transmission bands.</p></div>
+      <div class="card"><span class="num">03</span><h4>TACTICAL VEHICLE FIT</h4><p>Compact roof-box enclosure for convoys, escort vehicles and rapid response units.</p></div>
+      <div class="card"><span class="num">04</span><h4>CONFIGURABLE BANDS</h4><p>Mission-specific frequency configuration with per-band power modules.</p></div>
+    </div>
+  </div>
+  <img src="assets/alfa-850v-mobile-product.webp" alt="ALFA 850V Mobile Product">
+</section>
+
+<section class="section bottom-grid">
+  <div>
+    <h3 class="section-title">TECHNICAL SPECIFICATIONS</h3>
+    <table>
+      <tr><td>SYSTEM TYPE</td><td>Vehicle-Mounted Mobile Jammer</td></tr>
+      <tr><td>PLATFORM</td><td>Roof-mount enclosure, vehicle-integrated</td></tr>
+      <tr><td>OPERATIONAL MODE</td><td>Mobile / Stationary</td></tr>
+      <tr><td>COVERAGE</td><td>360° omnidirectional, 60° elevation</td></tr>
+      <tr><td>RF OUTPUT FREQUENCIES</td><td>430 MHz – 6 GHz</td></tr>
+      <tr><td>RF OUTPUT POWER</td><td>850 W total output</td></tr>
+      <tr><td>POWER SUPPLY</td><td>220V AC – 50 Hz / Optional battery</td></tr>
+      <tr><td>POWER CONSUMPTION</td><td>≤ 2 kW</td></tr>
+      <tr><td>ACTIVATION TIME</td><td>3 seconds to full jamming output</td></tr>
+      <tr><td>DIMENSIONS</td><td>W: 90 cm × H: 45 cm × L: 152 cm</td></tr>
+      <tr><td>WEIGHT</td><td>≤ 90 kg</td></tr>
+      <tr><td>ANTENNA TYPE</td><td>High-gain omnidirectional, min. 9 dBi</td></tr>
+      <tr><td>OPERATING TEMPERATURE</td><td>-15°C to +65°C</td></tr>
+      <tr><td>INTERFACE</td><td>RJ-45 Ethernet 100 Mbps / RS-232/422 optional</td></tr>
+    </table>
+    <p class="note">* Operational performance varies depending on terrain, threat profile and vehicle integration.</p>
+  </div>
+
+  <div>
+    <h3 class="section-title">OPERATIONAL SCENARIOS</h3>
+    <div class="scenario"><img src="assets/mobile-convoy.webp"><div><h4>MILITARY CONVOYS</h4><p>Protect vehicle columns against UAV surveillance and hostile drone activity.</p></div></div>
+    <div class="scenario"><img src="assets/mobile-vip-escort.webp"><div><h4>VIP & ASSET ESCORT</h4><p>Provide mobile RF protection for high-value personnel and assets.</p></div></div>
+    <div class="scenario"><img src="assets/mobile-border-patrol.webp"><div><h4>BORDER PATROL</h4><p>Support mobile patrol and rapid response missions in border areas.</p></div></div>
+    <div class="scenario"><img src="assets/mobile-urban.webp"><div><h4>URBAN OPERATIONS</h4><p>Deploy counter-UAV capability for temporary sites and urban security missions.</p></div></div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div>
+    <h2>PROTECT YOUR<br>MOBILE OPERATIONS.</h2>
+    <div class="redline"></div>
+    <p>Contact us for vehicle integration, deployment model and configuration options.</p>
+  </div>
+
+  <form class="form">
+    <h3>REQUEST INFORMATION</h3>
+    <div class="form-grid">
+      <input placeholder="Full Name">
+      <input placeholder="Email Address">
+    </div>
+    <input placeholder="Organization">
+    <textarea placeholder="Your Message"></textarea>
+    <button type="submit">SEND REQUEST →</button>
+  </form>
+</section>
+
+</body>
+</html>
