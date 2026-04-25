@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IED JAMMER | Remote-Controlled Bomb Device Blocking System | Alfasis Defense</title>
+<meta name="description" content="IED JAMMER — receiver-blind remote-controlled bomb device blocking system for fixed, mobile, vehicle and tactical deployment." />
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --font-display:'Barlow Condensed',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --red:#e30613;
+  --dark:#07101b;
+  --dark-2:#0b1624;
+  --text:#111827;
+  --body:#374151;
+  --muted:#6b7280;
+  --line:#d9dde4;
+  --soft:#eef0f4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:#f3f4f6;color:var(--text);font-size:16px;line-height:1.7;letter-spacing:-.01em}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+h1,h2,h3,h4,h5,.logo,.section-title,.nav-right,button,td:first-child{font-family:var(--font-display)}
+p{color:var(--body);font-size:16px;line-height:1.75;font-weight:400}
+
+.nav{
+  height:70px;background:var(--dark);color:#fff;display:flex;align-items:center;
+  justify-content:space-between;padding:0 55px;border-bottom:1px solid rgba(255,255,255,.08);
+  position:sticky;top:0;z-index:20
+}
+.logo{font-size:34px;font-weight:800;letter-spacing:.08em;line-height:1}
+.logo small{display:block;font-family:var(--font-body);font-size:10px;font-weight:600;letter-spacing:.22em;margin-top:1px}
+.nav-right{display:flex;gap:28px;align-items:center;font-size:14px;font-weight:700;letter-spacing:.04em}
+.btn{background:var(--red);color:#fff;padding:13px 24px;border-radius:2px}
+
+.hero{
+  height:520px;
+  background:
+    linear-gradient(90deg,rgba(5,10,18,.96) 0%,rgba(5,10,18,.76) 39%,rgba(5,10,18,.08) 100%),
+    url('assets/ied-jammer-hero.webp') center/cover no-repeat;
+  display:flex;align-items:center;padding:0 58px;color:#fff
+}
+.hero h5{color:#ff1f2d;font-size:18px;font-weight:800;letter-spacing:.05em;margin-bottom:12px}
+.hero h1{font-size:96px;line-height:.86;font-weight:800;letter-spacing:.02em}
+.hero h2{font-size:40px;margin-top:18px;letter-spacing:.02em}
+.redline{width:130px;height:4px;background:var(--red);margin:24px 0}
+.hero h3{font-size:26px;letter-spacing:.08em}
+.hero h3 span{color:var(--red)}
+.hero p{font-size:18px;line-height:1.65;margin-top:22px;max-width:575px;color:#e5e7eb}
+
+.specbar{background:var(--dark);color:#fff;display:grid;grid-template-columns:repeat(5,1fr);padding:24px 48px;gap:18px}
+.spec{display:flex;gap:15px;align-items:center;border-right:1px solid rgba(255,255,255,.18)}
+.spec:last-child{border-right:0}
+.ico{width:48px;height:48px;border:1px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.spec b{display:block;font-family:var(--font-display);font-size:17px;letter-spacing:.02em}
+.spec span{font-family:var(--font-body);font-size:13px;color:#cbd5e1;line-height:1.45}
+
+.section{padding:44px 58px}
+.section-title{font-size:24px;color:var(--red);margin-bottom:22px;font-weight:800;letter-spacing:.02em}
+.overview{display:grid;grid-template-columns:1.1fr 1fr;gap:70px;border-bottom:1px solid var(--line);padding-bottom:45px}
+.overview p{font-size:16px;line-height:1.75;margin-bottom:20px}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.feature{display:grid;grid-template-columns:44px 1fr;gap:15px}
+.feature strong{display:block;font-family:var(--font-display);font-size:18px;color:#111827}
+.feature span{font-size:14px;color:var(--body);line-height:1.65}
+
+.cap-wrap{display:grid;grid-template-columns:1fr 260px;gap:45px;align-items:end;border-bottom:1px solid var(--line);padding-bottom:35px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.card{background:var(--soft);padding:22px 18px;min-height:155px}
+.num{background:var(--red);color:#fff;font-family:var(--font-display);font-size:22px;font-weight:800;padding:5px 9px;display:inline-block;margin-bottom:15px}
+.card h4{font-size:18px;margin-bottom:12px;line-height:1.18}
+.card p{font-size:13px;line-height:1.65;color:var(--body)}
+
+.bottom-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:55px}
+table{width:100%;border-collapse:collapse;background:#f9fafb}
+td{border:1px solid var(--line);padding:10px 18px;font-size:14px;line-height:1.55;color:#1f2937}
+td:first-child{font-size:15px;font-weight:800;width:38%;color:#111827;letter-spacing:.02em}
+.note{font-size:12px;color:var(--muted);margin-top:13px}
+
+.scenario{display:grid;grid-template-columns:190px 1fr;background:#eceef2;margin-bottom:7px}
+.scenario img{height:105px;width:100%;object-fit:cover}
+.scenario div{padding:18px}
+.scenario h4{font-size:21px;line-height:1.05;margin-bottom:5px}
+.scenario p{font-size:14px;line-height:1.45;color:var(--body)}
+
+.cta{background:var(--dark);color:#fff;display:grid;grid-template-columns:1.1fr .9fr;gap:55px;padding:50px 58px}
+.cta h2{font-size:36px;line-height:1.1}
+.cta .redline{margin:18px 0}
+.cta p{color:#d1d5db;font-size:16px}
+.cta-icons{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px}
+.cta-icon{border-left:1px solid rgba(255,255,255,.15);padding-left:18px}
+.cta-icon b{display:block;font-family:var(--font-display);font-size:16px}
+.cta-icon span{font-size:12px;color:#cbd5e1;line-height:1.5}
+.form h3{font-family:var(--font-display);color:#ff1f2d;margin-bottom:15px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input,textarea{width:100%;padding:14px;border:none;margin-bottom:10px;font-family:var(--font-body)}
+textarea{height:78px}
+button{background:var(--red);color:#fff;border:none;padding:14px 28px;font-size:17px;font-weight:800;cursor:pointer}
+
+@media(max-width:900px){
+  .nav{padding:0 22px}.nav-right{gap:14px}.nav-right a:first-child{display:none}
+  .hero{padding:40px 24px;height:560px;background-position:center right}
+  .hero h1{font-size:72px}.hero h2{font-size:31px}.hero p{font-size:16px}
+  .specbar,.overview,.cap-wrap,.bottom-grid,.cta{grid-template-columns:1fr}
+  .specbar{padding:20px}.spec{border-right:0;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:14px}
+  .cards{grid-template-columns:1fr 1fr}.section{padding:36px 24px}.cta{padding:38px 24px}
+  .scenario{grid-template-columns:135px 1fr}.form-grid,.cta-icons{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .cards{grid-template-columns:1fr}
+  .hero h1{font-size:60px}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+  <div class="logo">ALFASIS<small>COUNTER-UAV TECHNOLOGIES</small></div>
+  <div class="nav-right">
+    <a href="/">← BACK TO PRODUCTS</a>
+    <a class="btn" href="#contact">CONTACT US ›</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <h5>ELECTRONIC WARFARE</h5>
+    <h1>IED<br>JAMMER</h1>
+    <h2>REMOTE-CONTROLLED BOMB DEVICE BLOCKING SYSTEM</h2>
+    <div class="redline"></div>
+    <h3>BLIND. <span>BLOCK.</span> PROTECT.</h3>
+    <p>Receiver-blind countermeasure system designed to neutralize remote-controlled and drone-triggered improvised explosive devices with reduced collateral RF interference.</p>
+  </div>
+</section>
+
+<div class="specbar">
+  <div class="spec"><div class="ico">RF</div><div><b>FULL TRIGGER COVERAGE</b><span>315 / 433 MHz, LoRa, PMR, VHF/UHF, GSM, GNSS</span></div></div>
+  <div class="spec"><div class="ico">◉</div><div><b>RECEIVER-BLIND TECHNOLOGY</b><span>Targeted protection without wide-band RF pollution</span></div></div>
+  <div class="spec"><div class="ico">1KM</div><div><b>SCALABLE RANGE</b><span>Portable, vehicle and fixed configurations</span></div></div>
+  <div class="spec"><div class="ico">⚡</div><div><b>2 kW MAX.</b><span>Fixed system power consumption</span></div></div>
+  <div class="spec"><div class="ico">▣</div><div><b>TACTICAL DEPLOYMENT</b><span>Fixed / Mobile / Vehicle / Portable</span></div></div>
+</div>
+
+<section class="section overview">
+  <div>
+    <h3 class="section-title">SYSTEM OVERVIEW</h3>
+    <p>IED Jammer is a purpose-built countermeasure system for modern defense and security environments. It is engineered to address remote detonation methods such as short-range RF controls, LoRa ISM modules, handheld PMR/VHF/UHF radios, GSM telephone triggers and GNSS-location detonation systems.</p>
+    <p>Unlike conventional broad-spectrum jammers, the system uses receiver-blinding technology. This approach targets the IED receiver side, enabling extended effective range at lower RF power while reducing interference with friendly communications.</p>
+  </div>
+
+  <div class="features">
+    <div class="feature"><div>◉</div><div><strong>Receiver-Blind Architecture</strong><span>Designed to blind the IED receiver instead of polluting the entire RF spectrum.</span></div></div>
+    <div class="feature"><div>📡</div><div><strong>Known Threat Coverage</strong><span>Covers documented IED trigger methods including RF, LoRa, PMR/VHF/UHF, GSM and GNSS.</span></div></div>
+    <div class="feature"><div>🛡</div><div><strong>Reduced RF Interference</strong><span>Helps friendly communications operate normally inside the protected zone.</span></div></div>
+    <div class="feature"><div>⚙</div><div><strong>Programmable Bands</strong><span>New and emerging threat RF bands can be configured according to mission needs.</span></div></div>
+    <div class="feature"><div>🚙</div><div><strong>Multiple Deployment Models</strong><span>Fixed facility, vehicle roof-rack and battery-powered portable versions.</span></div></div>
+    <div class="feature"><div>🎯</div><div><strong>Mission-Focused Protection</strong><span>Designed for convoys, checkpoints, EOD teams, facilities and VIP escorts.</span></div></div>
+  </div>
+</section>
+
+<section class="section cap-wrap">
+  <div>
+    <h3 class="section-title">CORE CAPABILITIES</h3>
+    <div class="cards">
+      <div class="card"><span class="num">01</span><h4>RECEIVER-BLIND PROTECTION</h4><p>Neutralizes remote triggering by targeting the IED receiver path instead of wide-band noise jamming.</p></div>
+      <div class="card"><span class="num">02</span><h4>FULL TRIGGER METHOD COVERAGE</h4><p>Supports protection against RF controls, LoRa modules, handheld radios, GSM and GNSS-triggered systems.</p></div>
+      <div class="card"><span class="num">03</span><h4>SCALABLE DEPLOYMENT</h4><p>Available for fixed sites, vehicle columns, intervention teams and portable tactical protection.</p></div>
+      <div class="card"><span class="num">04</span><h4>LOW RF POLLUTION</h4><p>Minimizes collateral RF interference and supports safer operation around friendly communications.</p></div>
+    </div>
+  </div>
+  <img src="assets/ied-jammer-product.webp" alt="IED Jammer Product">
+</section>
+
+<section class="section bottom-grid">
+  <div>
+    <h3 class="section-title">TECHNICAL SPECIFICATIONS</h3>
+    <table>
+      <tr><td>SYSTEM TYPE</td><td>IED and remote-controlled bomb blocking system</td></tr>
+      <tr><td>TECHNOLOGY</td><td>Receiver-blinding architecture</td></tr>
+      <tr><td>COVERED FREQUENCIES</td><td>315 / 433 MHz RF, LoRa ISM, PMR/VHF/UHF, GSM, GNSS</td></tr>
+      <tr><td>DEPLOYMENT</td><td>Fixed / Mobile / Tactical</td></tr>
+      <tr><td>DEPLOYMENT VARIANTS</td><td>Fixed, vehicle roof-rack, portable 1 km, portable 250–300 m, portable 100 m</td></tr>
+      <tr><td>POWER SUPPLY</td><td>220V AC / 50 Hz fixed system; battery for portable models</td></tr>
+      <tr><td>POWER CONSUMPTION</td><td>2 kW maximum</td></tr>
+      <tr><td>DIMENSIONS</td><td>W: 60 cm × L: 60 cm × D: 60 cm</td></tr>
+      <tr><td>WEIGHT</td><td>40 kg maximum</td></tr>
+      <tr><td>INTERFACE</td><td>RJ-45 Ethernet 100 Mbps / RS-232/422 optional</td></tr>
+      <tr><td>PRODUCT TYPE</td><td>IED and remote-controlled bomb blocking system</td></tr>
+      <tr><td>CATEGORY</td><td>Electronic Warfare</td></tr>
+    </table>
+    <p class="note">* Configuration and operating range vary depending on deployment model, terrain and threat profile.</p>
+  </div>
+
+  <div>
+    <h3 class="section-title">OPERATIONAL SCENARIOS</h3>
+    <div class="scenario"><img src="assets/ied-scenario-convoy.webp" alt=""><div><h4>CONVOY PROTECTION</h4><p>Protect military columns and escort routes against remote-controlled IED trigger threats.</p></div></div>
+    <div class="scenario"><img src="assets/ied-scenario-checkpoint.webp" alt=""><div><h4>CHECKPOINT SECURITY</h4><p>Secure border crossings, military gates, search points and controlled access zones.</p></div></div>
+    <div class="scenario"><img src="assets/ied-scenario-eod.webp" alt=""><div><h4>EOD TEAM SUPPORT</h4><p>Provide protective RF coverage for bomb disposal and intervention teams.</p></div></div>
+    <div class="scenario"><img src="assets/ied-scenario-facility.webp" alt=""><div><h4>FACILITY DEFENSE</h4><p>Protect fixed buildings, critical infrastructure and forward operating base perimeters.</p></div></div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div>
+    <h2>READY TO SECURE<br>YOUR ROUTE?</h2>
+    <div class="redline"></div>
+    <p>Contact us for fixed, vehicle-mounted or portable IED Jammer deployment options.</p>
+    <div class="cta-icons">
+      <div class="cta-icon"><b>EXPERT CONSULTATION</b><span>Mission profile and deployment planning.</span></div>
+      <div class="cta-icon"><b>CUSTOM CONFIGURATION</b><span>Programmable bands and scalable system options.</span></div>
+      <div class="cta-icon"><b>GLOBAL SUPPORT</b><span>Technical support for defense and security users.</span></div>
+    </div>
+  </div>
+
+  <form class="form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+    <h3>REQUEST INFORMATION</h3>
+    <input type="hidden" name="_subject" value="IED Jammer Inquiry">
+    <input type="hidden" name="product" value="IED Jammer">
+    <div class="form-grid">
+      <input name="name" placeholder="Full Name" required>
+      <input name="email" type="email" placeholder="Email Address" required>
+    </div>
+    <input name="organization" placeholder="Organization">
+    <textarea name="message" placeholder="Your Message"></textarea>
+    <button type="submit">SEND REQUEST →</button>
+  </form>
+</section>
+
+</body>
+</html>
