@@ -809,3 +809,6 @@ footer {
   .hero-actions a { text-align: center; }
   .about-badges { flex-wrap: wrap; }
 }
+
+
+.popup-overlay { display: none !important; }
