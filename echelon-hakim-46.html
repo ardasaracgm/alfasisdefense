@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ECHELON HAKİM 46 | Integrated C-UAS System | Alfasis Defense</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:#f3f4f6;color:#111827}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+
+.nav{
+height:70px;background:#07101b;color:#fff;display:flex;align-items:center;
+justify-content:space-between;padding:0 55px;border-bottom:1px solid rgba(255,255,255,.08)
+}
+.logo{font-family:'Barlow Condensed';font-size:34px;font-weight:800;letter-spacing:.08em}
+.logo small{display:block;font-size:10px;letter-spacing:.22em;margin-top:-8px}
+.nav-right{display:flex;gap:28px;align-items:center;font-family:'Barlow Condensed';font-size:14px;font-weight:700}
+.btn{background:#e30613;color:#fff;padding:13px 24px;border-radius:2px}
+
+.hero{
+height:520px;background:linear-gradient(90deg,rgba(5,10,18,.95) 0%,rgba(5,10,18,.72) 38%,rgba(5,10,18,.08) 100%),
+url('assets/hakim-46-hero.webp') center/cover no-repeat;
+display:flex;align-items:center;padding:0 58px;color:#fff
+}
+.hero h5{color:#ff1f2d;font-size:18px;font-weight:800;letter-spacing:.05em;margin-bottom:12px}
+.hero h1{font-family:'Barlow Condensed';font-size:115px;line-height:.82;font-weight:800}
+.hero h2{font-family:'Barlow Condensed';font-size:42px;margin-top:18px}
+.redline{width:130px;height:4px;background:#e30613;margin:24px 0}
+.hero h3{font-family:'Barlow Condensed';font-size:26px;letter-spacing:.08em}
+.hero h3 span{color:#e30613}
+.hero p{font-size:20px;line-height:1.55;margin-top:22px;max-width:520px}
+
+.specbar{background:#07101b;color:#fff;display:grid;grid-template-columns:repeat(5,1fr);padding:24px 48px;gap:18px}
+.spec{display:flex;gap:15px;align-items:center;border-right:1px solid rgba(255,255,255,.18)}
+.spec:last-child{border-right:0}
+.ico{width:48px;height:48px;border:1px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800}
+.spec b{display:block;font-family:'Barlow Condensed';font-size:17px}
+.spec span{font-size:13px;color:#cbd5e1}
+
+.section{padding:44px 58px}
+.section-title{font-family:'Barlow Condensed';font-size:24px;color:#e30613;margin-bottom:22px;font-weight:800}
+.overview{display:grid;grid-template-columns:1.1fr 1fr;gap:70px;border-bottom:1px solid #d7dce3;padding-bottom:45px}
+.overview p{font-size:17px;line-height:1.75;color:#1f2937;margin-bottom:20px}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.feature{display:grid;grid-template-columns:44px 1fr;gap:15px}
+.feature strong{display:block;font-family:'Barlow Condensed';font-size:18px}
+.feature span{font-size:14px;color:#374151;line-height:1.45}
+
+.cap-wrap{display:grid;grid-template-columns:1fr 260px;gap:45px;align-items:end;border-bottom:1px solid #d7dce3;padding-bottom:35px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.card{background:#eef0f4;padding:22px 18px;min-height:145px}
+.num{background:#e30613;color:#fff;font-family:'Barlow Condensed';font-size:22px;font-weight:800;padding:5px 9px;display:inline-block;margin-bottom:15px}
+.card h4{font-family:'Barlow Condensed';font-size:18px;margin-bottom:12px}
+.card p{font-size:13px;line-height:1.55;color:#374151}
+
+.bottom-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:55px}
+table{width:100%;border-collapse:collapse;background:#f9fafb}
+td{border:1px solid #d9dde4;padding:10px 18px;font-size:14px}
+td:first-child{font-weight:800;font-family:'Barlow Condensed';width:37%}
+.note{font-size:12px;color:#6b7280;margin-top:13px}
+
+.scenario{display:grid;grid-template-columns:190px 1fr;background:#eceef2;margin-bottom:7px}
+.scenario img{height:105px;width:100%;object-fit:cover}
+.scenario div{padding:19px}
+.scenario h4{font-family:'Barlow Condensed';font-size:21px}
+.scenario p{font-size:14px;line-height:1.45;color:#374151}
+
+.cta{background:#07101b;color:#fff;display:grid;grid-template-columns:1.1fr .9fr;gap:55px;padding:50px 58px}
+.cta h2{font-family:'Barlow Condensed';font-size:36px;line-height:1.1}
+.cta .redline{margin:18px 0}
+.cta p{color:#d1d5db;font-size:16px}
+.form h3{font-family:'Barlow Condensed';color:#ff1f2d;margin-bottom:15px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input,textarea{width:100%;padding:14px;border:none;margin-bottom:10px}
+textarea{height:78px}
+button{background:#e30613;color:#fff;border:none;padding:14px 28px;font-family:'Barlow Condensed';font-size:17px;font-weight:800;cursor:pointer}
+
+@media(max-width:900px){
+.nav{padding:0 22px}.hero{padding:40px 24px;height:560px}.hero h1{font-size:82px}
+.specbar,.overview,.cap-wrap,.bottom-grid,.cta{grid-template-columns:1fr}
+.specbar{padding:20px}.spec{border-right:0;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:14px}
+.cards{grid-template-columns:1fr 1fr}.section{padding:36px 24px}.cta{padding:38px 24px}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+  <div class="logo">ALFASIS<small>COUNTER-UAV TECHNOLOGIES</small></div>
+  <div class="nav-right">
+    <a href="/">← BACK TO PRODUCTS</a>
+    <a class="btn" href="#contact">CONTACT US ›</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <h5>ECHELON</h5>
+    <h1>HAKİM 46</h1>
+    <h2>INTEGRATED C-UAS SYSTEM</h2>
+    <div class="redline"></div>
+    <h3>DETECT. TRACK. <span>NEUTRALIZE.</span></h3>
+    <p>Integrated detect-track-jam counter-UAS system for fixed-site and critical infrastructure protection across 400 MHz–8 GHz.</p>
+  </div>
+</section>
+
+<div class="specbar">
+  <div class="spec"><div class="ico">∿</div><div><b>WIDE FREQUENCY COVERAGE</b><span>400 MHz – 8 GHz</span></div></div>
+  <div class="spec"><div class="ico">⚡</div><div><b>TOTAL RF OUTPUT</b><span>1000 W</span></div></div>
+  <div class="spec"><div class="ico">360°</div><div><b>DETECT + JAM</b><span>Omnidirectional</span></div></div>
+  <div class="spec"><div class="ico">▥</div><div><b>RADAR RANGE</b><span>Up to 40 km</span></div></div>
+  <div class="spec"><div class="ico">⚙</div><div><b>ALL-WEATHER</b><span>24/7 Operation</span></div></div>
+</div>
+
+<section class="section overview">
+  <div>
+    <h3 class="section-title">SYSTEM OVERVIEW</h3>
+    <p>HAKİM 46 is a layered, integrated counter-UAS system that unifies broadband RF jamming, SDR-based signal detection, EO/IR tracking, and AESA surveillance radar under a single command-and-control software suite.</p>
+    <p>The system executes a complete detect–track–classify–jam–manage engagement chain, delivering continuous airspace protection for fixed sites and critical infrastructure across the 400 MHz–8 GHz spectrum.</p>
+  </div>
+
+  <div class="features">
+    <div class="feature"><div>📡</div><div><strong>Broadband RF Jamming</strong><span>400 MHz–8 GHz, 1000 W analog architecture.</span></div></div>
+    <div class="feature"><div>🛰</div><div><strong>AESA Surveillance Radar</strong><span>Tracks 200+ targets up to 40 km.</span></div></div>
+    <div class="feature"><div>🎥</div><div><strong>EO/IR Tracking</strong><span>Day/night, all-weather, thermal + visible.</span></div></div>
+    <div class="feature"><div>📶</div><div><strong>SDR RF Detection</strong><span>Real-time 400 MHz–8 GHz spectrum monitoring.</span></div></div>
+    <div class="feature"><div>🖥</div><div><strong>C2 Command Software</strong><span>Unified operational picture.</span></div></div>
+    <div class="feature"><div>🛡</div><div><strong>Fixed-Site Protection</strong><span>Critical infrastructure & bases.</span></div></div>
+  </div>
+</section>
+
+<section class="section cap-wrap">
+  <div>
+    <h3 class="section-title">CORE CAPABILITIES</h3>
+    <div class="cards">
+      <div class="card"><span class="num">01</span><h4>EW JAMMER (46-EW)</h4><p>Broadband analog RF jamming, 1000 W, directional up to 10 km / omni min 5 km radius.</p></div>
+      <div class="card"><span class="num">02</span><h4>AESA RADAR (46-CUAS)</h4><p>X-band, 8 frequency hops, 200+ targets, 40 km range, IP67.</p></div>
+      <div class="card"><span class="num">03</span><h4>EO/IR TRACKING</h4><p>640×512 thermal + 4MP starlight camera, 360° servo, 16 TOPS edge AI.</p></div>
+      <div class="card"><span class="num">04</span><h4>C2 SOFTWARE (46-C2)</h4><p>Unified command, sensor + effector fusion, real-time alerts.</p></div>
+    </div>
+  </div>
+  <img src="assets/hakim-46-product.webp" alt="ECHELON HAKİM 46 Product">
+</section>
+
+<section class="section bottom-grid">
+  <div>
+    <h3 class="section-title">TECHNICAL SPECIFICATIONS</h3>
+    <table>
+      <tr><td>FREQUENCY RANGE</td><td>400 MHz – 8 GHz</td></tr>
+      <tr><td>TOTAL RF OUTPUT POWER</td><td>1000 W</td></tr>
+      <tr><td>OUTPUT PER CHANNEL</td><td>53 dBm EIRP</td></tr>
+      <tr><td>SUB-BANDS</td><td>430, 860, GNSS L1/L2-L5, 1400, 2400, 5200/5800, 6700 MHz (opt.)</td></tr>
+      <tr><td>DIRECTIONAL RANGE</td><td>Up to 10 km (430/860 MHz)</td></tr>
+      <tr><td>OMNI RANGE</td><td>Min 5 km radius</td></tr>
+      <tr><td>ANTENNA GAIN</td><td>&ge;4 dBi</td></tr>
+      <tr><td>POWER SUPPLY</td><td>220 VAC / 50 Hz</td></tr>
+      <tr><td>OPERATING TEMP</td><td>&ndash;15°C to +65°C</td></tr>
+    </table>
+    <p class="note">* Ranges vary depending on terrain, weather, and threat profile.</p>
+  </div>
+
+  <div>
+    <h3 class="section-title">OPERATIONAL SCENARIOS</h3>
+    <div class="scenario"><img src="assets/scenario-base.webp"><div><h4>MILITARY BASES</h4><p>Detect, track and neutralize hostile UAVs approaching critical military installations.</p></div></div>
+    <div class="scenario"><img src="assets/scenario-infrastructure.webp"><div><h4>CRITICAL INFRASTRUCTURE</h4><p>Layered airspace protection for power plants, refineries, airports and industrial sites.</p></div></div>
+    <div class="scenario"><img src="assets/scenario-border.webp"><div><h4>BORDER SURVEILLANCE</h4><p>Long-range radar detection and RF suppression against cross-border UAV incursions.</p></div></div>
+    <div class="scenario"><img src="assets/scenario-city.webp"><div><h4>URBAN AIRSPACE</h4><p>Secure sensitive urban airspace for government facilities and high-profile events.</p></div></div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div>
+    <h2>READY TO PROTECT<br>YOUR AIRSPACE?</h2>
+    <div class="redline"></div>
+    <p>Contact us for more information or a customized solution.</p>
+  </div>
+
+  <form class="form">
+    <h3>REQUEST INFORMATION</h3>
+    <div class="form-grid">
+      <input placeholder="Full Name">
+      <input placeholder="Email Address">
+    </div>
+    <input placeholder="Organization">
+    <textarea placeholder="Your Message"></textarea>
+    <button type="submit">SEND REQUEST →</button>
+  </form>
+</section>
+
+</body>
+</html>
