@@ -925,30 +925,6 @@ const MODALS = {
 // ── STATE ──────────────────────────
 let currentLang = 'en';
 
-// ── SAHA 2026 POPUP ──────────────────────
-function initPopup() {
-  const overlay    = document.getElementById('sahaPopup');
-  const closeBtn   = document.getElementById('popupClose');
-  const contactBtn = document.getElementById('popupContactBtn');
-  if (!overlay) return;
-
-  // Show after 1.2s delay
-  setTimeout(() => {
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }, 1200);
-
-  function closePopup() {
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  closeBtn.addEventListener('click', closePopup);
-  overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
-  contactBtn?.addEventListener('click', closePopup);
-}
-
 // ── VIDEO CAROUSEL ──────────────────────
 function initCarousel() {
   const videos  = Array.from(document.querySelectorAll('.hero-video'));
@@ -1021,7 +997,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initModal();
   initForm();
   initCarousel();
-  initPopup();
   applyLang('en');
 });
 
