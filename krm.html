@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tataristan C-UAS Kapsama Alanı Planlama Aracı</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Leaflet.js Harita Kütüphanesi -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        #map { width: 100vw; height: 90vh; }
+        .info-panel { 
+            height: 10vh; 
+            padding: 15px; 
+            background: #1e1e1e; 
+            color: #ffffff; 
+            box-sizing: border-box; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .warning { color: #ff4d4d; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <div>
+            <h3 style="margin: 0; padding-bottom: 5px;">RF Kapama ve C-UAS Yerleşim Planı (Tataristan)</h3>
+            <span style="font-size: 14px;">Haritada korumak istediğiniz tesise tıklayın. 5 km yarıçaplı 360° koruma kalkanı otomatik çizilecektir.</span>
+        </div>
+        <div>
+            Kalan Sistem Sayısı: <span id="counter" style="font-size: 20px; font-weight: bold; color: #4CAF50;">3</span> / 3
+        </div>
+    </div>
+    <div id="map"></div>
+
+    <script>
+        // Tataristan genelini (Kazan civarı) merkeze alan harita başlangıç ayarları
+        var map = L.map('map').setView([55.796391, 49.108891], 7);
+
+        // OpenStreetMap katmanı
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var systemsPlaced = 0;
+        var maxSystems = 3;
+        var coverageRadius = 5000; // 5 KM efektif menzil (metre cinsinden)
+
+        map.on('click', function(e) {
+            if (systemsPlaced < maxSystems) {
+                // Sistemin yerleştirildiği merkez nokta (Örn: Tesis merkezi veya mobil araç konumu)
+                var marker = L.marker(e.latlng).addTo(map)
+                    .bindPopup("<b>Sistem " + (systemsPlaced + 1) + "</b><br>Koordinat: " + e.latlng.lat.toFixed(5) + ", " + e.latlng.lng.toFixed(5))
+                    .openPopup();
+
+                // 5 KM Kapsama Alanı Çemberi (Reactive Jammer/Radar Etki Alanı)
+                L.circle(e.latlng, {
+                    color: '#ff0000',
+                    fillColor: '#ff0000',
+                    fillOpacity: 0.15,
+                    weight: 2,
+                    radius: coverageRadius 
+                }).addTo(map);
+
+                systemsPlaced++;
+                var counterEl = document.getElementById('counter');
+                counterEl.innerText = maxSystems - systemsPlaced;
+                
+                if(systemsPlaced === maxSystems) {
+                    counterEl.className = 'warning';
+                    counterEl.style.color = '#ff4d4d';
+                }
+            } else {
+                alert("Uyarı: Planlanan 3 adet sistemin tamamını haritaya yerleştirdiniz.");
+            }
+        });
+    </script>
+</body>
+</html>
