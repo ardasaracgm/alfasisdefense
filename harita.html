@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kapsama haritası – Alfasis</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
+<link rel="preconnect" href="https://photon.komoot.io" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+<style>
+  :root { --ink:#1c1d21; --mute:#6b6f78; --line:#e4e1da; --soft:#f6f5f2; --accent:#0f6fde; }
+  * { box-sizing:border-box }
+  html,body { margin:0; height:100%; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--ink) }
+  #map { position:absolute; inset:0 }
+
+  .panel { position:absolute; top:14px; left:14px; width:min(380px, calc(100vw - 28px)); background:#fff; max-height:calc(100vh - 28px); overflow:auto;
+           border-radius:14px; box-shadow:0 8px 30px rgba(0,0,0,.16); padding:14px; z-index:2 }
+  .step { position:relative }
+  .step + .step { margin-top:10px }
+  .step label { display:flex; align-items:center; gap:8px; font-size:11px; font-weight:600; letter-spacing:.06em;
+                text-transform:uppercase; color:var(--mute); margin-bottom:6px }
+  .num { width:18px; height:18px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center; font-size:10.5px }
+  .step.off .num { background:#c9c5bc }
+  .field { position:relative }
+  .field input { width:100%; padding:11px 36px 11px 12px; font-size:15px; border:1.5px solid var(--line);
+                 border-radius:10px; outline:none; background:#fff; color:var(--ink) }
+  .field input:focus { border-color:var(--accent) }
+  .field input:disabled { background:var(--soft); color:#aaa }
+  .clear { position:absolute; right:8px; top:50%; transform:translateY(-50%); border:0; background:none;
+           font-size:18px; color:var(--mute); cursor:pointer; display:none; padding:4px 6px }
+  .spin { position:absolute; right:12px; top:50%; width:14px; height:14px; margin-top:-7px; border:2px solid #ddd;
+          border-top-color:var(--accent); border-radius:50%; animation:s .7s linear infinite; display:none }
+  @keyframes s { to { transform:rotate(360deg) } }
+
+  .list { list-style:none; margin:6px 0 0; padding:4px; border:1px solid var(--line); border-radius:10px;
+          max-height:330px; overflow:auto; display:none; background:#fff }
+  .list li { display:grid; grid-template-columns:26px 1fr; gap:8px; padding:8px; border-radius:8px; cursor:pointer; align-items:start }
+  .list li[aria-selected=true], .list li:hover { background:var(--soft) }
+  .list .ic { font-size:16px; line-height:20px; text-align:center }
+  .list .t { font-size:14px; font-weight:500 }
+  .list .s { font-size:12px; color:var(--mute); margin-top:1px }
+  .list .src { font-size:10px; font-weight:600; color:var(--accent); margin-left:6px }
+  .list .empty { display:block; color:var(--mute); font-size:13px; cursor:default; padding:10px }
+  .list .empty:hover { background:none }
+
+  .opts { display:flex; align-items:center; gap:6px; margin-top:8px; font-size:12.5px; color:var(--mute) }
+  .chip { display:inline-flex; align-items:center; gap:6px; margin-top:8px; background:var(--soft); border-radius:8px;
+          padding:5px 9px; font-size:12.5px }
+  .chip button { border:0; background:none; cursor:pointer; color:var(--mute); font-size:14px; padding:0 }
+
+  .result { margin-top:12px; border-top:1px solid var(--line); padding-top:12px; font-size:13px; display:none }
+  .result h3 { margin:0 0 2px; font-size:15px }
+  .result .addr { color:var(--mute); margin-bottom:8px }
+  .result code { font:12px ui-monospace,Menlo,monospace; background:var(--soft); padding:3px 6px; border-radius:6px }
+  .result .row { display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+  .btn { border:1px solid var(--line); background:#fff; border-radius:8px; padding:6px 10px; font-size:12.5px; cursor:pointer }
+  .btn:hover { border-color:#bbb }
+  .hint { font-size:12px; color:var(--mute); margin-top:10px; line-height:1.45 }
+
+  .pin { width:22px; height:22px; border-radius:50% 50% 50% 0; background:var(--accent); transform:rotate(-45deg);
+         border:3px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,.35) }
+
+  #status { position:absolute; left:14px; bottom:14px; z-index:3; background:rgba(28,29,33,.92); color:#fff;
+            font:12px/1.5 ui-monospace,Menlo,monospace; padding:9px 12px; border-radius:10px; max-width:min(520px,calc(100vw - 28px)) }
+  #status .ok { color:#7ee2a8 } #status .wait { color:#ffd479 } #status .bad { color:#ff8f8f }
+  #status button { margin-top:6px; background:#fff; border:0; border-radius:6px; padding:3px 8px; font:11px system-ui; cursor:pointer }
+  .near { margin-top:12px; border-top:1px solid var(--line); padding-top:12px; display:none }
+  .seg { display:grid; grid-template-columns:repeat(auto-fit,minmax(0,1fr)); gap:4px; background:var(--soft); padding:3px; border-radius:9px; margin-bottom:8px }
+  .seg button { border:0; background:transparent; padding:7px 4px; border-radius:7px; font-size:12.5px; font-weight:500; color:var(--mute); cursor:pointer }
+  .seg button.on { background:#fff; color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,.08) }
+  .seg .r5 { color:#1569c7 } .seg .r20 { color:#b42828 }
+  .cats { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:6px }
+  .cats button { border:1px solid var(--line); background:#fff; border-radius:20px; padding:3px 9px; font-size:12px; cursor:pointer; color:var(--ink) }
+  .cats button.on { background:var(--ink); color:#fff; border-color:var(--ink) }
+  .cats button:disabled { opacity:.35; cursor:default }
+  .nl { list-style:none; margin:0; padding:0 }
+  .nl li { display:grid; grid-template-columns:24px 1fr auto; gap:8px; align-items:center; padding:7px 4px; border-radius:7px; cursor:pointer; font-size:13.5px }
+  .nl li:hover { background:var(--soft) }
+  .nl .k { font-size:11.5px; color:var(--mute) }
+  .nl .d { font:12px ui-monospace,Menlo,monospace; color:var(--mute) }
+  .nmsg { font-size:12.5px; color:var(--mute); padding:6px 2px }
+  .more { margin-top:4px; width:100% }
+  .addbar { display:flex; gap:5px; margin-top:10px; align-items:center }
+  .addbar span { font-size:12px; color:var(--mute); margin-right:2px }
+  .addbar .btn { flex:1; padding:7px 6px; font-weight:600 }
+  .btn.b5 { color:#1569c7; border-color:#bcd7f7 } .btn.b5:hover { background:#eef5fe }
+  .btn.b5g { color:#13804a; border-color:#b9e3cb } .btn.b5g:hover { background:#eefaf3 }
+  .btn.b20 { color:#b42828; border-color:#f1c4c4 } .btn.b20:hover { background:#fdf0f0 }
+  .pts { margin-top:12px; border-top:1px solid var(--line); padding-top:12px; display:none }
+  .pts h4, .near h4 { margin:0 0 8px; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--mute); display:flex; justify-content:space-between; align-items:center; gap:8px }
+  .pts h4 button { text-transform:none; letter-spacing:0 }
+  .pl { list-style:none; margin:0; padding:0 }
+  .pl li { display:grid; grid-template-columns:24px 1fr auto auto; gap:8px; align-items:center; padding:7px 6px; border-radius:9px; cursor:pointer; border:1.5px solid transparent }
+  .pl li + li { margin-top:3px }
+  .pl li.act { border-color:var(--ink); background:#fff }
+  .pl li:not(.act):hover { background:var(--soft) }
+  .badge { width:22px; height:22px; border-radius:50%; color:#fff; display:grid; place-items:center; font-size:11px; font-weight:700 }
+  .pl input.nm { border:0; padding:1px 0; width:100%; background:transparent; font:500 13.5px system-ui,sans-serif; color:var(--ink); outline:none;
+                 border-bottom:1px dashed transparent; cursor:text }
+  .pl input.nm:hover { border-bottom-color:#cfcac0 } .pl input.nm:focus { border-bottom-color:var(--accent) }
+  .sbrow { display:flex; align-items:center; gap:6px; min-width:0 }
+  .sw { display:flex; gap:3px; flex:none }
+  .sw button { width:13px; height:13px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px #cfcac0; padding:0; cursor:pointer }
+  .sw button.on { box-shadow:0 0 0 2px var(--ink) }
+  .sw button:disabled { opacity:.3; cursor:default }
+  .pl .nm { font-size:13.5px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .pl .sb { font-size:11.5px; color:var(--mute); white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+  .mini { display:flex; background:var(--soft); border-radius:7px; padding:2px; gap:2px }
+  .mini button { border:0; background:none; font-size:11px; padding:3px 6px; border-radius:5px; cursor:pointer; color:var(--mute) }
+  .mini button.on { background:#fff; color:var(--ink); font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.1) }
+  .ib { border:0; background:none; cursor:pointer; color:var(--mute); font-size:14px; padding:2px 4px; border-radius:5px }
+  .ib:hover { color:var(--ink); background:var(--soft) }
+  .sharebar { display:flex; gap:5px; margin-top:10px }
+  .sharebar .btn { flex:1; padding:7px 6px; font-weight:600 }
+  .sharebox { margin-top:8px; background:var(--soft); border-radius:10px; padding:9px; display:none }
+  .sharebox .row2 { display:flex; gap:5px }
+  .sharebox input { flex:1; min-width:0; border:1px solid var(--line); border-radius:7px; padding:6px 8px; font:12.5px ui-monospace,Menlo,monospace; background:#fff; color:var(--ink) }
+  .sharebox .msg { font-size:12px; color:var(--mute); margin-top:6px }
+  .sharebox .msg.err { color:#b42828 }
+  .langsw { display:flex; justify-content:flex-end; gap:2px; margin:-4px -4px 6px 0 }
+  .langsw button { border:1px solid var(--line); background:#fff; font:600 11px system-ui,sans-serif; padding:3px 8px; cursor:pointer; color:var(--mute) }
+  .langsw button:first-child { border-radius:6px 0 0 6px } .langsw button:last-child { border-radius:0 6px 6px 0 }
+  .langsw button.on { background:var(--ink); color:#fff; border-color:var(--ink) }
+  .sharedinfo { margin-top:10px; background:#eef5fe; color:#1450a0; border-radius:9px; padding:8px 10px; font-size:12.5px; display:none }
+  .pairs { margin-top:8px; font-size:12px; color:var(--mute) }
+  .pairs div { display:flex; justify-content:space-between; padding:3px 2px; border-top:1px dashed var(--line) }
+  .pmk { width:28px; height:28px; border-radius:50%; transition:width .12s, height .12s; color:#fff; display:grid; place-items:center; font:700 12.5px system-ui;
+         border:3px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,.35); cursor:grab }
+  .pmk.act { outline:3px solid var(--ink); outline-offset:1px }
+  .pmk.dot { font-size:0; border-width:2px }
+  .mlabel { position:absolute; left:calc(100% + 6px); top:50%; transform:translateY(-50%); white-space:nowrap; pointer-events:none;
+            background:#fff; color:var(--ink); font:600 12px system-ui,sans-serif; padding:3px 7px; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,.2) }
+  .pmk.dot .mlabel, .pmk.nolabel .mlabel { display:none }
+  .slab { display:grid; place-items:center; text-align:center; line-height:1.05; color:#1c1d21; font-weight:700; cursor:pointer;
+          background:rgba(255,255,255,.82); border-radius:999px; box-shadow:0 1px 4px rgba(0,0,0,.18); user-select:none }
+  .slab small { display:block; font-weight:600; color:#6b6f78; font-size:.62em }
+  .slab.sel { background:#1c1d21; color:#fff } .slab.sel small { color:#ddd }
+  .secs { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin:2px 0 8px }
+  .secs button { border:1px solid var(--line); background:#fff; border-radius:8px; padding:4px 2px; font-size:12px; font-weight:600; cursor:pointer; line-height:1.15; color:var(--ink) }
+  .secs button small { display:block; font-weight:400; font-size:10.5px; color:var(--mute) }
+  .secs button.on { background:var(--ink); color:#fff; border-color:var(--ink) } .secs button.on small { color:#ddd }
+  .secs button:disabled { opacity:.35; cursor:default }
+  .rot { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--mute); margin-bottom:8px }
+  .rot input { flex:1; accent-color:var(--ink) }
+  .rot b { color:var(--ink); font-weight:600; min-width:64px; text-align:right }
+  .sublabel { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--mute); margin:10px 0 5px; font-weight:600 }
+  .maplibregl-popup-content { font:13px system-ui,sans-serif; padding:8px 11px; border-radius:9px }
+  @media (max-width:560px) { .panel { top:auto; bottom:14px; max-height:55vh } }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="status"></div>
+
+<div class="panel">
+  <div class="langsw" id="langsw"><button data-lang="tr">TR</button><button data-lang="en">EN</button></div>
+  <div class="sharedinfo" id="sharedInfo"></div>
+  <div class="step" id="s1">
+    <label><span class="num">1</span><span data-i18n="s1">Şehir / bölge</span></label>
+    <div class="field">
+      <input id="city" type="text" placeholder="ör. Kos, Bodrum, Rodos" data-i18n-ph="cityPh" autocomplete="off" spellcheck="false"
+             role="combobox" aria-expanded="false" aria-controls="cityList" aria-autocomplete="list">
+      <div class="spin" id="citySpin"></div>
+      <button class="clear" id="cityClear" aria-label="Temizle" data-i18n-aria="clear">×</button>
+    </div>
+    <ul class="list" id="cityList" role="listbox"></ul>
+    <div class="chip" id="cityChip" style="display:none"><span id="cityChipText"></span><button id="cityChipX" title="Şehri değiştir" data-i18n-title="changeCity">×</button></div>
+  </div>
+
+  <div class="step off" id="s2">
+    <label><span class="num">2</span><span data-i18n="s2">Konum</span></label>
+    <div class="field">
+      <input id="place" type="text" placeholder="Önce şehir seç" data-i18n-ph="placePhNone" autocomplete="off" spellcheck="false" disabled
+             role="combobox" aria-expanded="false" aria-controls="placeList" aria-autocomplete="list">
+      <div class="spin" id="placeSpin"></div>
+      <button class="clear" id="placeClear" aria-label="Temizle" data-i18n-aria="clear">×</button>
+    </div>
+    <ul class="list" id="placeList" role="listbox"></ul>
+    <label class="opts"><input type="checkbox" id="strict" checked> <span data-i18n="strict">Sadece seçili bölgede ara (±15 km)</span></label>
+  </div>
+
+  <div class="result" id="result">
+    <h3 id="rName"></h3>
+    <div class="addr" id="rAddr"></div>
+    <div class="row"><code id="rCoord"></code><button class="btn" id="rCopy" data-i18n="copyCoord">Koordinatı kopyala</button></div>
+    <div class="addbar"><span data-i18n="add">Ekle:</span>
+      <button class="btn b5" data-add="5" data-c="blue" data-i18n="add5b">+ 5 mavi</button><button class="btn b5g" data-add="5" data-c="green" data-i18n="add5g">+ 5 yeşil</button><button class="btn b20" data-add="20">+ 20 km</button><button class="btn" data-add="both" data-i18n="addBoth">+ İkisi</button></div>
+  </div>
+
+  <div class="pts" id="pts">
+    <h4><span data-i18n="ptsTitle">Seçilen noktalar</span><button class="btn" id="fitAll" style="padding:4px 9px" data-i18n="fitAll">Tümünü göster</button></h4>
+    <ul class="pl" id="ptList"></ul>
+    <div class="pairs" id="pairs"></div>
+    <div class="sharebar">
+      <button class="btn" id="fileBtn" data-i18n="fileBtn">💾 Paylaşılabilir dosya kaydet</button>
+      <button class="btn" id="pngBtn" data-i18n="pngBtn">🖼️ PNG olarak al</button>
+    </div>
+    <div class="sharebox" id="shareBox"><div class="msg" id="shareMsg"></div></div>
+  </div>
+
+  <div class="near" id="near">
+    <h4><span id="nearTitle" data-i18n="nearDefault">Çevresinde neler var</span><span style="text-transform:none;letter-spacing:0;font-weight:400" data-i18n="crow">kuş uçuşu</span></h4>
+    <div class="seg" id="seg">
+      <button data-r="5" class="on"><span class="r5">●</span> <span data-i18n="in5">5 km içinde</span> <b id="c5"></b></button>
+      <button data-r="20" id="seg20"><span class="r20">●</span> 5–20 km <b id="c20"></b></button>
+      <button data-r="0" id="segAll"><span data-i18n="all">Tümü</span> <b id="cAll"></b></button>
+    </div>
+    <div id="secBox">
+      <div class="sublabel" data-i18n="secTitle">Yön dilimleri · merkezden 20 km'ye</div>
+      <div class="secs" id="secs"></div>
+      <div class="rot"><span data-i18n="rot1">1. dilimin yönü</span><input type="range" id="rot" min="0" max="355" step="5" value="0"><b id="rotV">0° K</b></div>
+    </div>
+    <div class="sublabel" data-i18n="catTitle">Kategori</div>
+    <div class="cats" id="cats"></div>
+    <ul class="nl" id="nl"></ul>
+    <button class="btn more" id="more" style="display:none"></button>
+  </div>
+
+  <p class="hint" data-i18n="hint">İpucu: Bir yer seç (arayarak ya da haritaya tıklayarak), sonra “+ 5 km” veya “+ 20 km” ile listeye ekle. Her noktanın kendi halkası olur; işaretleri sürükleyerek taşıyabilirsin.</p>
+</div>
+
+<script type="application/json" id="tb-data"></script>
+<script>
+/* ---- Sayfanın temiz kopyası: "Paylaşılabilir dosya kaydet" bunu kullanır.
+   Bu satırlar DOM'a hiçbir şey dokunmadan önce çalışır (scriptler hariç işaretleme). */
+window.__TB_SRC = {
+  head: document.head.outerHTML,
+  body: [...document.body.childNodes].filter(n => n.nodeName !== 'SCRIPT')
+          .map(n => n.nodeType === 1 ? n.outerHTML : n.nodeType === 3 ? n.textContent : '').join(''),
+};
+/* ================= Dil (TR / EN) ================= */
+const I18N = {
+  tr: {
+    s1:'Şehir / bölge', cityPh:'ör. Kos, Bodrum, Rodos', clear:'Temizle', changeCity:'Şehri değiştir',
+    s2:'Konum', placePhNone:'Önce şehir seç', placePhCity:'{city} içinde Konum',
+    strict:'Sadece seçili bölgede ara (±15 km)',
+    copyCoord:'Koordinatı kopyala', copied:'Kopyalandı ✓', copyFail:'Kopyalanamadı',
+    add:'Ekle:', add5b:'+ 5 mavi', add5g:'+ 5 yeşil', addBoth:'+ İkisi',
+    ptsTitle:'Seçilen noktalar', fitAll:'Tümünü göster',
+    fileBtn:'💾 Paylaşılabilir dosya kaydet', pngBtn:'🖼️ PNG olarak al', pngBusy:'Hazırlanıyor…',
+    nearDefault:'Çevresinde neler var', crow:'kuş uçuşu', in5:'5 km içinde', all:'Tümü',
+    secTitle:"Yön dilimleri · merkezden 20 km'ye", rot1:'1. dilimin yönü', catTitle:'Kategori', catAll:'Hepsi',
+    hint:'İpucu: Bir yer seç (arayarak ya da haritaya tıklayarak), sonra “+ 5 km” veya “+ 20 km” ile listeye ekle. Her noktanın kendi halkası olur; işaretleri sürükleyerek taşıyabilirsin.',
+    noResults:'Sonuç bulunamadı', searchErr:'Arama hatası: {m}',
+    cat_yer:'Yerleşim', cat_plaj:'Plaj', cat_gezi:'Gezilecek', cat_ulasim:'Ulaşım', cat_ada:'Ada',
+    k_city:'Şehir', k_town:'Kasaba', k_village:'Köy', k_suburb:'Mahalle', k_quarter:'Semt', k_neighbourhood:'Mahalle', k_hamlet:'Mezra',
+    k_island:'Ada', k_beach:'Plaj', k_aerodrome:'Havalimanı', k_ferry:'Feribot / iskele', k_bus:'Otogar', k_marina:'Marina',
+    k_castle:'Kale', k_arch:'Antik kent / ören yeri', k_monument:'Anıt', k_ruins:'Kalıntı',
+    k_attraction:'Turistik yer', k_museum:'Müze', k_viewpoint:'Seyir noktası', k_theme:'Eğlence parkı', k_aquarium:'Akvaryum',
+    dirS:['K','KD','D','GD','G','GB','B','KB'], dirL:['Kuzey','Kuzeydoğu','Doğu','Güneydoğu','Güney','Güneybatı','Batı','Kuzeybatı'],
+    secN:'{n}. dilim', modeBoth:'İkisi', moved:'Konum elle taşındı',
+    renameTip:'İsmi değiştirmek için tıkla', c5Tip:'5 km halkasının rengi', fitTip:'Halkaya yakınlaş', delTip:'Kaldır',
+    relInside:'biri diğerinin halkası içinde', relCross:'halkalar kesişiyor', relApart:'halkalar ayrı',
+    unnamed:'İsimsiz nokta', nearTitle:'{i}. {name} çevresi ({km} km)',
+    nearEmpty:'Bu seçimde kayıtlı yer yok.', more:'{n} tane daha göster', nearLoading:'Çevredeki yerler aranıyor…',
+    nearErr:'Çevre bilgisi alınamadı ({m}). Biraz sonra tekrar dene.', popupDist:'{name} noktasına {d}',
+    revLoading:'Adres aranıyor…', picked:'Seçilen nokta', noAddr:'Yakında adres bulunamadı', addrFail:'Adres alınamadı',
+    needPoint:'Önce en az bir nokta ekle.',
+    fileSaved:'“{name}” indirildi. Bu dosyayı gönderdiğin kişi açınca aynı noktaları, halkaları ve seçili yönü görür.',
+    fileErr:'Dosya oluşturulamadı: {m}', pngErr:'Görsel oluşturulamadı: {m}',
+    legendTitle:'Alfasis · Kapsama haritası', legendSel:'Seçili yön: {name}, {sec} ({dir})',
+    footer:'© OpenMapTiles © OpenStreetMap katkıcıları',
+    embInfo:'Bu dosyada kayıtlı harita{date}. Değişikliklerin bu tarayıcıda saklanır; başkasına göndermek için “Paylaşılabilir dosya kaydet”.',
+    st_lib:'MapLibre kütüphanesi (jsdelivr)', st_libBad:'indirilemedi: ağ/CDN engeli olabilir',
+    st_gl:'WebGL', st_glBad:'tarayıcıda WebGL kapalı/desteklenmiyor',
+    st_style:'Harita stili (OpenFreeMap)', st_tiles:'İlk harita parçaları', st_tilesErr:'Harita parçaları',
+    st_styleTimeout:'10 sn içinde gelmedi: tiles.openfreemap.org erişilemiyor olabilir',
+    photonTimeout:'Photon 8 sn içinde yanıt vermedi', overpassFail:'Overpass erişilemedi', badData:'Geçersiz harita verisi',
+    srcFail:'sayfa kaynağı okunamadı', fileBase:'harita', attrSearch:'Arama',
+  },
+  en: {
+    s1:'City / area', cityPh:'e.g. Kos, Bodrum, Rhodes', clear:'Clear', changeCity:'Change city',
+    s2:'Location address', placePhNone:'Choose a city first', placePhCity:'Location {city}',
+    strict:'Search only in the selected area (±15 km)',
+    copyCoord:'Copy coordinates', copied:'Copied ✓', copyFail:'Could not copy',
+    add:'Add:', add5b:'+ 5 blue', add5g:'+ 5 green', addBoth:'+ Both',
+    ptsTitle:'Selected points', fitAll:'Show all',
+    fileBtn:'💾 Save shareable file', pngBtn:'🖼️ Save as PNG', pngBusy:'Preparing…',
+    nearDefault:"What's nearby", crow:'straight-line', in5:'Within 5 km', all:'All',
+    secTitle:'Direction sectors · centre to 20 km', rot1:'Sector 1 faces', catTitle:'Category', catAll:'All',
+    hint:'Tip: pick a place (search or click the map), then add it with “+ 5 km” or “+ 20 km”. Each point gets its own ring; drag the markers to move them.',
+    noResults:'No results', searchErr:'Search error: {m}',
+    cat_yer:'Places', cat_plaj:'Beaches', cat_gezi:'Sights', cat_ulasim:'Transport', cat_ada:'Islands',
+    k_city:'City', k_town:'Town', k_village:'Village', k_suburb:'Suburb', k_quarter:'Quarter', k_neighbourhood:'Neighbourhood', k_hamlet:'Hamlet',
+    k_island:'Island', k_beach:'Beach', k_aerodrome:'Airport', k_ferry:'Ferry / pier', k_bus:'Bus station', k_marina:'Marina',
+    k_castle:'Castle', k_arch:'Ancient site', k_monument:'Monument', k_ruins:'Ruins',
+    k_attraction:'Attraction', k_museum:'Museum', k_viewpoint:'Viewpoint', k_theme:'Theme park', k_aquarium:'Aquarium',
+    dirS:['N','NE','E','SE','S','SW','W','NW'], dirL:['North','Northeast','East','Southeast','South','Southwest','West','Northwest'],
+    secN:'sector {n}', modeBoth:'Both', moved:'Moved manually',
+    renameTip:'Click to rename', c5Tip:'5 km ring colour', fitTip:'Zoom to ring', delTip:'Remove',
+    relInside:'one inside the other', relCross:'rings overlap', relApart:'rings apart',
+    unnamed:'Unnamed point', nearTitle:'{i}. Around {name} ({km} km)',
+    nearEmpty:'Nothing recorded for this selection.', more:'Show {n} more', nearLoading:'Looking up nearby places…',
+    nearErr:"Couldn't load nearby places ({m}). Try again shortly.", popupDist:'{d} from {name}',
+    revLoading:'Looking up address…', picked:'Selected point', noAddr:'No address nearby', addrFail:'Address unavailable',
+    needPoint:'Add at least one point first.',
+    fileSaved:'“{name}” downloaded. Whoever opens this file will see the same points, rings and selected direction.',
+    fileErr:'Could not create file: {m}', pngErr:'Could not create image: {m}',
+    legendTitle:'Alfasis · Coverage map', legendSel:'Selected direction: {name}, {sec} ({dir})',
+    footer:'© OpenMapTiles © OpenStreetMap contributors',
+    embInfo:'Map saved in this file{date}. Your changes are kept in this browser; to send it on, use “Save shareable file”.',
+    st_lib:'MapLibre library (jsdelivr)', st_libBad:'failed to download: network/CDN may be blocked',
+    st_gl:'WebGL', st_glBad:'WebGL is disabled or unsupported',
+    st_style:'Map style (OpenFreeMap)', st_tiles:'First map tiles', st_tilesErr:'Map tiles',
+    st_styleTimeout:'not received within 10 s: tiles.openfreemap.org may be unreachable',
+    photonTimeout:'Photon did not respond within 8 s', overpassFail:'Overpass unreachable', badData:'Invalid map data',
+    srcFail:'could not read page source', fileBase:'map', attrSearch:'Search',
+  },
+};
+const LANGS = ['tr', 'en'];
+let LANG_UI = (() => {
+  const q = new URLSearchParams(location.search).get('lang');
+  if (LANGS.includes(q)) return q;
+  try { const s = localStorage.getItem('tb-lang'); if (LANGS.includes(s)) return s; } catch {}
+  return /^tr\b/i.test(navigator.language || '') ? 'tr' : 'en';
+})();
+function t(key, vars) {
+  const v = I18N[LANG_UI][key] ?? I18N.tr[key] ?? key;
+  return typeof v === 'string' && vars ? v.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '') : v;
+}
+const LOCALE = () => LANG_UI === 'tr' ? 'tr-TR' : 'en-GB';
+function applyStatic() {
+  document.documentElement.lang = LANG_UI;
+  document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => el.placeholder = t(el.dataset.i18nPh));
+  document.querySelectorAll('[data-i18n-title]').forEach(el => el.title = t(el.dataset.i18nTitle));
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
+  document.querySelectorAll('#langsw [data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG_UI));
+}
+applyStatic();
+
+/* ---- Yükleme durumu: harita takılırsa hangi adımda takıldığını gösterir ---- */
+const T0 = performance.now();
+const steps = [];
+function step(key, label, state, extra='') {
+  let s = steps.find(x => x.key === key);
+  if (!s) steps.push(s = { key });
+  Object.assign(s, { label, state, extra, ms: Math.round(performance.now() - T0) });
+  const sym = { ok:'✓', wait:'…', bad:'✗' };
+  const el = document.getElementById('status');
+  el.innerHTML = steps.map(x => `<div class="${x.state}">${sym[x.state]} ${t(x.label)}${x.state !== 'wait' ? ` <span style="opacity:.6">${x.ms} ms</span>` : ''}${x.extra ? ` — ${x.extra}` : ''}</div>`).join('')
+    + (steps.every(x => x.state === 'ok') ? '' : '');
+  if (steps.length && steps.every(x => x.state === 'ok')) setTimeout(() => el.style.display = 'none', 2500);
+  else el.style.display = 'block';
+}
+step.rerender = () => { const s = steps[0]; if (s) step(s.key, s.label, s.state, s.extra); };
+step('lib', 'st_lib', 'wait');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js"
+        onload="step('lib','st_lib','ok')"
+        onerror="step('lib','st_lib','bad',t('st_libBad'))"></script>
+<script>
+if (!window.maplibregl) throw new Error('MapLibre yüklenemedi');
+
+/* ================= Ayarlar ================= */
+// Canlıya alırken PHOTON'u kendi backend proxy'ne çevir (ör. '/api/geo'); proxy sonuçları cache'lesin.
+const PHOTON = 'https://photon.komoot.io';
+const STYLE  = 'https://tiles.openfreemap.org/styles/liberty';
+const LANG   = 'en';                              // Photon: default | en | de | fr
+const START  = { center:[27.6, 37.0], zoom:7.3 }; // Ege
+const DEBOUNCE_MS = 200, MIN_CHARS = 2, AREA_KM = 15;
+
+/* Kendi otel listen. Kendi API'nden ara ve şu biçimde dön: [{ name, address, lon, lat }]
+   Bu sonuçlar Photon'dakilerin üstünde, "Alfasis" etiketiyle görünür. */
+async function searchOwnHotels(q, cityName, signal) {
+  // return fetch(`/api/hotels?q=${encodeURIComponent(q)}&city=${encodeURIComponent(cityName)}`, { signal }).then(r => r.json());
+  return [];
+}
+
+/* ================= Harita ================= */
+{ const c = document.createElement('canvas');
+  if (!(c.getContext('webgl2') || c.getContext('webgl'))) step('gl', 'st_gl', 'bad', t('st_glBad')); }
+step('style', 'st_style', 'wait');
+const map = new maplibregl.Map({ container:'map', style:STYLE, ...START,
+  attributionControl:{ compact:true, customAttribution:`<span class="attr-search">${t('attrSearch')}</span>: <a href="https://photon.komoot.io" target="_blank" rel="noopener">Photon</a>` } });
+map.once('style.load', () => { step('style', 'st_style', 'ok'); step('tiles', 'st_tiles', 'wait'); });
+map.once('load', () => step('tiles', 'st_tiles', 'ok'));
+map.on('error', e => {
+  const msg = e.error?.message || String(e.error || e);
+  const key = /style/i.test(msg) || !map.isStyleLoaded() ? 'style' : 'tiles';
+  step(key, key === 'style' ? 'st_style' : 'st_tilesErr', 'bad', msg.slice(0, 140));
+});
+setTimeout(() => { if (!map.isStyleLoaded()) step('style', 'st_style', 'bad', t('st_styleTimeout')); }, 10000);
+map.addControl(new maplibregl.NavigationControl(), 'top-right');
+map.addControl(new maplibregl.ScaleControl({ unit:'metric' }), 'bottom-right');
+
+// Etiketler: önce İngilizce, yoksa Latin harfli, yoksa yerel ad (Κως yerine Kos)
+map.on('style.load', () => {
+  for (const l of map.getStyle().layers) {
+    if (l.type === 'symbol' && map.getLayoutProperty(l.id, 'text-field'))
+      map.setLayoutProperty(l.id, 'text-field', ['coalesce', ['get','name:en'], ['get','name:latin'], ['get','name']]);
+  }
+});
+
+const pinEl = document.createElement('div'); pinEl.className = 'pin';
+const pin = new maplibregl.Marker({ element:pinEl, anchor:'bottom', offset:[0,-4] });
+
+/* ================= Yardımcılar ================= */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+const join = (...a) => [...new Set(a.filter(Boolean))].join(', ');
+
+const cache = new Map();
+// params: [[key, value], ...] — Photon'da 'layer' gibi anahtarlar tekrar edebildiği için dizi
+async function photon(path, params, signal) {
+  const url = `${PHOTON}${path}?${new URLSearchParams(params)}`;
+  if (cache.has(url)) return cache.get(url);
+  // 8 sn içinde yanıt yoksa vazgeç (asılı kalmasın)
+  const tmo = AbortSignal.timeout ? AbortSignal.timeout(8000) : null;
+  const sig = signal && tmo && AbortSignal.any ? AbortSignal.any([signal, tmo]) : (signal || tmo);
+  let r;
+  try { r = await fetch(url, { signal: sig }); }
+  catch (e) { if (tmo?.aborted && !signal?.aborted) throw new Error(t('photonTimeout')); throw e; }
+  if (!r.ok) throw new Error(`Photon ${r.status}`);
+  const feats = (await r.json()).features || [];
+  cache.set(url, feats);
+  return feats;
+}
+
+function describe(f) {
+  const p = f.properties;
+  const street = p.street ? p.street + (p.housenumber ? ' ' + p.housenumber : '') : '';
+  const title = p.name || street || p.city || p.county || '—';
+  const sub = join(p.name ? street : '', p.locality, p.district, p.city !== title ? p.city : '', p.state, p.country);
+  return { title, sub };
+}
+const ICONS = { hotel:'🏨', hostel:'🛏️', guest_house:'🏠', apartment:'🏢', motel:'🏨', resort:'🏝️', chalet:'🏡',
+  city:'🏙️', town:'🏘️', village:'🏡', hamlet:'🏡', suburb:'📍', neighbourhood:'📍', island:'🏝️', islet:'🏝️',
+  ferry_terminal:'⛴️', aerodrome:'✈️', restaurant:'🍽️', beach:'🏖️', house:'🏠', street:'🛣️', residential:'🛣️' };
+const icon = f => ICONS[f.properties.osm_value] || ICONS[f.properties.type] || '📍';
+
+// [w,s,e,n] kutusunu merkezden en az ±km olacak şekilde genişlet
+function padBox([w,s,e,n], km) {
+  const cx = (w+e)/2, cy = (s+n)/2;
+  const dLat = km/111.32, dLon = km/(111.32*Math.cos(cy*Math.PI/180));
+  return [Math.min(w, cx-dLon), Math.min(s, cy-dLat), Math.max(e, cx+dLon), Math.max(n, cy+dLat)];
+}
+const rowHtml = (ic, title, sub, src='') =>
+  `<span class="ic">${ic}</span><div><div class="t">${esc(title)}${src ? `<span class="src">${src}</span>` : ''}</div><div class="s">${esc(sub)}</div></div>`;
+
+/* ================= Genel autocomplete bileşeni ================= */
+function autocomplete({ input, list, spin, clearBtn, search, render, onPick }) {
+  let timer, ctrl, items = [], active = -1;
+  const open = v => { list.style.display = v ? 'block' : 'none'; input.setAttribute('aria-expanded', String(v)); };
+  const setActive = i => {
+    active = i;
+    [...list.children].forEach((li, k) => li.setAttribute('aria-selected', String(k === i)));
+    list.children[i]?.scrollIntoView({ block:'nearest' });
+  };
+  const show = res => {
+    items = res; list.innerHTML = '';
+    if (!res.length) { list.innerHTML = `<li class="empty">${t('noResults')}</li>`; open(true); return; }
+    res.forEach((it, i) => {
+      const li = document.createElement('li'); li.setAttribute('role','option'); li.innerHTML = render(it);
+      li.onmousedown = e => { e.preventDefault(); pick(i); };
+      list.appendChild(li);
+    });
+    open(true); setActive(0);
+  };
+  const pick = i => { const it = items[i]; if (!it) return; open(false); onPick(it); };
+  input.addEventListener('input', () => {
+    clearBtn.style.display = input.value ? 'block' : 'none';
+    clearTimeout(timer); ctrl?.abort();
+    const q = input.value.trim();
+    if (q.length < MIN_CHARS) { items = []; open(false); spin.style.display = 'none'; return; }
+    timer = setTimeout(async () => {
+      ctrl = new AbortController(); spin.style.display = 'block'; clearBtn.style.display = 'none';
+      try { show(await search(q, ctrl.signal)); }
+      catch (e) { if (e.name !== 'AbortError') { items = []; list.innerHTML = `<li class="empty">${esc(t('searchErr', { m:e.message }))}</li>`; open(true); } }
+      finally { spin.style.display = 'none'; clearBtn.style.display = input.value ? 'block' : 'none'; }
+    }, DEBOUNCE_MS);
+  });
+  input.addEventListener('keydown', e => {
+    if (list.style.display !== 'block' || !items.length) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(Math.min(items.length-1, active+1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(Math.max(0, active-1)); }
+    else if (e.key === 'Enter') { e.preventDefault(); pick(active); }
+    else if (e.key === 'Escape') open(false);
+  });
+  input.addEventListener('blur', () => setTimeout(() => open(false), 120));
+  input.addEventListener('focus', () => { if (items.length && input.value.trim().length >= MIN_CHARS) open(true); });
+  clearBtn.onclick = () => { input.value = ''; clearBtn.style.display = 'none'; items = []; open(false); input.focus(); };
+  return { reset() { clearTimeout(timer); ctrl?.abort(); items = []; open(false); clearBtn.style.display = 'none'; } };
+}
+
+/* ================= Adım 1: şehir ================= */
+let city = null; // { name, box:[w,s,e,n] }
+
+const cityAC = autocomplete({
+  input:$('city'), list:$('cityList'), spin:$('citySpin'), clearBtn:$('cityClear'),
+  search: (q, signal) => photon('/api', [['q',q],['lang',LANG],['limit','7'],
+      ['layer','city'],['layer','locality'],['layer','district'],['layer','county']], signal),
+  render: f => { const d = describe(f); return rowHtml(icon(f), d.title, d.sub); },
+  onPick: selectCity,
+});
+
+function selectCity(f) {
+  const p = f.properties, [lon, lat] = f.geometry.coordinates;
+  const e = p.extent; // Photon: [minLon, maxLat, maxLon, minLat]
+  const box = e ? [e[0], e[3], e[2], e[1]] : [lon, lat, lon, lat];
+  city = { name: p.name, box: padBox(box, AREA_KM) };
+  if (e) map.fitBounds([[box[0], box[1]], [box[2], box[3]]], { padding:{ top:60, bottom:60, left:420, right:60 }, maxZoom:13, duration:600 });
+  else   map.easeTo({ center:[lon, lat], zoom:12, duration:600 });
+
+  $('city').value = ''; $('city').parentElement.style.display = 'none';
+  $('cityChipText').textContent = join(p.name, p.state, p.country);
+  $('cityChip').style.display = 'inline-flex';
+  $('s1').classList.add('done');
+  const place = $('place');
+  $('s2').classList.remove('off'); place.disabled = false;
+  place.dataset.city = p.name; place.placeholder = t('placePhCity', { city:p.name }); place.focus();
+}
+
+$('cityChipX').onclick = () => {
+  city = null; cityAC.reset(); placeAC.reset();
+  $('cityChip').style.display = 'none'; $('city').parentElement.style.display = 'block';
+  $('s2').classList.add('off'); Object.assign($('place'), { disabled:true, value:'', placeholder:t('placePhNone') }); delete $('place').dataset.city;
+  $('city').focus();
+};
+
+/* ================= Adım 2: otel / adres ================= */
+const placeAC = autocomplete({
+  input:$('place'), list:$('placeList'), spin:$('placeSpin'), clearBtn:$('placeClear'),
+  search: async (q, signal) => {
+    const c = map.getCenter();
+    const params = [['q',q],['lang',LANG],['limit','10'],['lat',c.lat.toFixed(5)],['lon',c.lng.toFixed(5)]];
+    if (city && $('strict').checked) params.push(['bbox', city.box.map(v => v.toFixed(5)).join(',')]);
+    const [own, osm] = await Promise.all([
+      searchOwnHotels(q, city?.name ?? '', signal).catch(() => []),
+      photon('/api', params, signal),
+    ]);
+    return [
+      ...own.map(h => ({ own:true, title:h.name, sub:h.address || '', lon:h.lon, lat:h.lat })),
+      ...osm.filter(f => !['country','state'].includes(f.properties.type))
+            .map(f => { const d = describe(f); const [lon, lat] = f.geometry.coordinates;
+                        return { f, title:d.title, sub:d.sub, lon, lat }; }),
+    ];
+  },
+  render: it => rowHtml(it.own ? '⭐' : icon(it.f), it.title, it.sub, it.own ? 'Alfasis' : ''),
+  onPick: it => showResult(it.title, it.sub, it.lon, it.lat, 15),
+});
+
+/* ================= Kapsama halkaları (WGS84 Vincenty) ================= */
+const RINGS = [5, 20]; // km
+const GA = 6378137, GF = 1/298.257223563, GB = GA*(1-GF), RAD = Math.PI/180;
+function vDirect(lon, lat, brg, s) {
+  const a1 = brg*RAD, sa1 = Math.sin(a1), ca1 = Math.cos(a1);
+  const tU1 = (1-GF)*Math.tan(lat*RAD), cU1 = 1/Math.sqrt(1+tU1*tU1), sU1 = tU1*cU1;
+  const s1 = Math.atan2(tU1, ca1), sa = cU1*sa1, c2a = 1-sa*sa, u2 = c2a*(GA*GA-GB*GB)/(GB*GB);
+  const A = 1+u2/16384*(4096+u2*(-768+u2*(320-175*u2))), B = u2/1024*(256+u2*(-128+u2*(74-47*u2)));
+  let sig = s/(GB*A), sigP, c2m, ss, cs;
+  do { c2m = Math.cos(2*s1+sig); ss = Math.sin(sig); cs = Math.cos(sig);
+       const ds = B*ss*(c2m+B/4*(cs*(-1+2*c2m*c2m)-B/6*c2m*(-3+4*ss*ss)*(-3+4*c2m*c2m)));
+       sigP = sig; sig = s/(GB*A)+ds; } while (Math.abs(sig-sigP) > 1e-12);
+  const t = sU1*ss-cU1*cs*ca1;
+  const lat2 = Math.atan2(sU1*cs+cU1*ss*ca1, (1-GF)*Math.sqrt(sa*sa+t*t));
+  const lam = Math.atan2(ss*sa1, cU1*cs-sU1*ss*ca1), C = GF/16*c2a*(4+GF*(4-3*c2a));
+  return [lon + (lam-(1-C)*GF*sa*(sig+C*ss*(c2m+C*cs*(-1+2*c2m*c2m))))/RAD, lat2/RAD];
+}
+function vDist(lon1, lat1, lon2, lat2) {
+  const L = (lon2-lon1)*RAD, U1 = Math.atan((1-GF)*Math.tan(lat1*RAD)), U2 = Math.atan((1-GF)*Math.tan(lat2*RAD));
+  const sU1 = Math.sin(U1), cU1 = Math.cos(U1), sU2 = Math.sin(U2), cU2 = Math.cos(U2);
+  let lam = L, lamP, it = 0, sS, cS, sig, c2a, c2m;
+  do { const sl = Math.sin(lam), cl = Math.cos(lam);
+       sS = Math.hypot(cU2*sl, cU1*sU2-sU1*cU2*cl); if (!sS) return 0;
+       cS = sU1*sU2+cU1*cU2*cl; sig = Math.atan2(sS, cS);
+       const sa = cU1*cU2*sl/sS; c2a = 1-sa*sa; c2m = c2a ? cS-2*sU1*sU2/c2a : 0;
+       const C = GF/16*c2a*(4+GF*(4-3*c2a)); lamP = lam;
+       lam = L+(1-C)*GF*sa*(sig+C*sS*(c2m+C*cS*(-1+2*c2m*c2m)));
+  } while (Math.abs(lam-lamP) > 1e-12 && ++it < 200);
+  const u2 = c2a*(GA*GA-GB*GB)/(GB*GB);
+  const A = 1+u2/16384*(4096+u2*(-768+u2*(320-175*u2))), B = u2/1024*(256+u2*(-128+u2*(74-47*u2)));
+  return GB*A*(sig - B*sS*(c2m+B/4*(cS*(-1+2*c2m*c2m)-B/6*c2m*(-3+4*sS*sS)*(-3+4*c2m*c2m))));
+}
+// GeoJSON dış halka saat yönünün tersine (RFC 7946)
+const ringCoords = (lon, lat, km, steps = 180) => {
+  const p = []; for (let i = steps; i >= 0; i--) p.push(vDirect(lon, lat, (360*i/steps) % 360, km*1000)); return p;
+};
+
+const EMPTY = { type:'FeatureCollection', features:[] };
+function ensureLayers() {
+  if (map.getSource('rings')) return;
+  map.addSource('rings', { type:'geojson', data:EMPTY });
+  map.addSource('near',  { type:'geojson', data:EMPTY });
+  map.addLayer({ id:'rings-fill', type:'fill', source:'rings',
+    paint:{ 'fill-color':['get','col'],
+            'fill-opacity':['*', ['match',['get','km'],5,0.13,0.06], ['case',['get','act'],1,0.6], ['case',['get','nofill'],0,1]] } });
+  map.addLayer({ id:'rings-line', type:'line', source:'rings',
+    paint:{ 'line-color':['get','col'], 'line-width':['case',['get','act'],3,1.8],
+            'line-dasharray':['match',['get','km'],5,['literal',[1]],['literal',[3,2]]] } });
+  map.addLayer({ id:'near-pt', type:'circle', source:'near',
+    paint:{ 'circle-radius':['interpolate',['linear'],['zoom'],8,3.5,13,6.5],
+            'circle-color':['get','col'],
+            'circle-stroke-color':'#fff', 'circle-stroke-width':1.5,
+            'circle-opacity':['case',['boolean',['feature-state','hide'],false],0,['boolean',['feature-state','dim'],false],0.25,1],
+            'circle-stroke-opacity':['case',['boolean',['feature-state','hide'],false],0,['boolean',['feature-state','dim'],false],0.25,1] } });
+  map.addSource('secs', { type:'geojson', data:EMPTY });
+  // bir yön seçilince diğer dilimler örtülür (kapanır); "Tümü"de hepsi açık
+  // bir yön seçilince yalnız o dilim renkli kalır, diğerleri şeffaf; "Tümü"de normal halka rengi
+  map.addLayer({ id:'secs-fill', type:'fill', source:'secs', paint:{ 'fill-color':'#df3a3a',
+    'fill-opacity':['case',['get','sel'],0.16,0] } }, 'rings-line');
+  map.addLayer({ id:'secs-line', type:'line', source:'secs', paint:{ 'line-color':'#1c1d21', 'line-opacity':0.45, 'line-width':1.2, 'line-dasharray':[2,2] } }, 'near-pt');
+}
+map.on('style.load', ensureLayers);
+
+/* ================= Çevredeki yerler (Overpass) ================= */
+// Canlıda kendi backend'inden geçir ve cache'le; ileride kendi PostGIS POI tablona çevrilebilir.
+const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter'];
+const CATS = {
+  yer:    { icon:'🏘️' },
+  plaj:   { icon:'🏖️' },
+  gezi:   { icon:'🏛️' },
+  ulasim: { icon:'⛴️' },
+  ada:    { icon:'🏝️' },
+};
+function categorize(t) {
+  if (t.place && /^(island|islet)$/.test(t.place)) return ['ada', 'k_island'];
+  if (t.place) return ['yer', 'k_' + t.place];
+  if (t.natural === 'beach') return ['plaj', 'k_beach'];
+  if (t.aeroway === 'aerodrome') return ['ulasim', 'k_aerodrome'];
+  if (t.amenity === 'ferry_terminal') return ['ulasim', 'k_ferry'];
+  if (t.amenity === 'bus_station') return ['ulasim', 'k_bus'];
+  if (t.leisure === 'marina') return ['ulasim', 'k_marina'];
+  const h = { castle:'k_castle', archaeological_site:'k_arch', monument:'k_monument', ruins:'k_ruins' }[t.historic];
+  if (h) return ['gezi', h];
+  const tr = { attraction:'k_attraction', museum:'k_museum', viewpoint:'k_viewpoint', theme_park:'k_theme', aquarium:'k_aquarium' }[t.tourism];
+  if (tr) return ['gezi', tr];
+  return [null, null];
+}
+const GREEK = /[\u0370-\u03FF]/;
+const pickName = t => GREEK.test(t.name || '') ? (t['name:en'] || t.int_name || t['name:tr'] || t.name) : t.name;
+
+const kindLabel = i => i.kind ? t(i.kind) : t('cat_' + i.cat);
+const nearCache = new Map();
+async function overpassNearby(lon, lat, signal) {
+  const key = `${lon.toFixed(3)},${lat.toFixed(3)}`;
+  if (nearCache.has(key)) return nearCache.get(key);
+  const R = RINGS[1] * 1000, a = `(around:${R},${lat.toFixed(6)},${lon.toFixed(6)})`;
+  const q = `[out:json][timeout:20];(
+    node${a}[place~"^(city|town|village|suburb|quarter|neighbourhood|hamlet)$"][name];
+    nwr${a}[place~"^(island|islet)$"][name];
+    nwr${a}[natural=beach][name];
+    nwr${a}[tourism~"^(attraction|museum|viewpoint|theme_park|aquarium)$"][name];
+    nwr${a}[historic~"^(castle|archaeological_site|monument|ruins)$"][name];
+    nwr${a}[aeroway=aerodrome][name];
+    nwr${a}[amenity~"^(ferry_terminal|bus_station)$"][name];
+    nwr${a}[leisure=marina][name];
+  );out center tags;`;
+  let lastErr;
+  for (const url of OVERPASS) {
+    const tmo = AbortSignal.timeout ? AbortSignal.timeout(25000) : null;
+    const sig = tmo && AbortSignal.any ? AbortSignal.any([signal, tmo]) : signal;
+    try {
+      const r = await fetch(url, { method:'POST', body:'data=' + encodeURIComponent(q), signal:sig,
+                                   headers:{ 'Content-Type':'application/x-www-form-urlencoded' } });
+      if (!r.ok) throw new Error(`Overpass ${r.status}`);
+      const els = (await r.json()).elements || [];
+      nearCache.set(key, els);
+      return els;
+    } catch (e) { if (signal.aborted) throw e; lastErr = e; }
+  }
+  throw lastErr || new Error(t('overpassFail'));
+}
+
+function buildNearby(els, lon, lat, maxKm) {
+  const out = [];
+  for (const e of els) {
+    const t = e.tags || {}, [cat, kind] = categorize(t);
+    if (!cat) continue;
+    const plon = e.lon ?? e.center?.lon, plat = e.lat ?? e.center?.lat;
+    if (plon == null) continue;
+    const d = vDist(lon, lat, plon, plat);
+    if (d > maxKm*1000 || d < 1) continue;
+    const name = pickName(t);
+    // aynı ad + kategori 400 m içinde tekrar ediyorsa tek say
+    if (out.some(o => o.name === name && o.cat === cat && vDist(o.lon, o.lat, plon, plat) < 400)) continue;
+    out.push({ name, cat, kind, lon:plon, lat:plat, d, brg:bearing(lon, lat, plon, plat), ring: d <= RINGS[0]*1000 ? 5 : 20 });
+  }
+  out.sort((a, b) => a.d - b.d);
+  out.forEach((o, i) => o.id = i); // id = dizideki sıra (liste ve harita aynı id'yi kullanır)
+  return out;
+}
+
+/* ================= Yön dilimleri ================= */
+const SECTORS = 6, SEC_DEG = 360 / SECTORS;
+const dirIdx = deg => Math.round((((deg % 360) + 360) % 360) / 45) % 8;
+const dirName = deg => t('dirS')[dirIdx(deg)];   // kısa: K / N
+const dirLong = deg => t('dirL')[dirIdx(deg)];   // uzun: Kuzey / North
+function bearing(lon1, lat1, lon2, lat2) {
+  const f1 = lat1*RAD, f2 = lat2*RAD, dl = (lon2-lon1)*RAD;
+  return (Math.atan2(Math.sin(dl)*Math.cos(f2), Math.cos(f1)*Math.sin(f2) - Math.sin(f1)*Math.cos(f2)*Math.cos(dl)) / RAD + 360) % 360;
+}
+// p.rot = 1. dilimin orta yönü (derece). Dilim k: [rot-30+60k, rot+30+60k)
+const secMid = (p, k) => ((p.rot ?? 0) + k*SEC_DEG + 360) % 360;
+const sectorOf = (p, brg) => Math.floor((((brg - (p.rot ?? 0) + SEC_DEG/2) % 360) + 360) % 360 / SEC_DEG);
+let nearSec = -1; // -1 = tüm dilimler
+const hasSectors = p => !!p && MODE_KM[p.mode].includes(20);
+const secLabels = [];
+
+function drawSectors() {
+  const p = active();
+  if (!map.getSource('secs')) return;
+  secLabels.forEach(m => m.remove()); secLabels.length = 0;
+  $('secBox').style.display = hasSectors(p) ? '' : 'none';
+  if (!hasSectors(p)) { nearSec = -1; map.getSource('secs').setData(EMPTY); return; }
+  const R = maxKm(p) * 1000, feats = [];
+  for (let k = 0; k < SECTORS; k++) {
+    const a0 = secMid(p, k) - SEC_DEG/2, ring = [[p.lon, p.lat]];                           // merkezden başla
+    for (let i = 0; i <= 30; i++) ring.push(vDirect(p.lon, p.lat, a0 + SEC_DEG*i/30, R));   // dış yay
+    ring.push([p.lon, p.lat]);
+    feats.push({ type:'Feature', properties:{ k, sel:k === nearSec, anysel:nearSec >= 0 }, geometry:{ type:'Polygon', coordinates:[ring.reverse()] } });
+    const el = document.createElement('div');
+    el.className = 'slab' + (k === nearSec ? ' sel' : '');
+    if (nearSec >= 0 && k !== nearSec) el.style.opacity = '0.55';
+    el.innerHTML = `${k + 1}<small>${dirName(secMid(p, k))}</small>`;
+    el.title = `${t('secN', { n:k + 1 })} · ${dirLong(secMid(p, k))}`;
+    el.addEventListener('click', ev => { ev.stopPropagation(); nearSec = nearSec === k ? -1 : k; nearShown = 25; drawSectors(); renderNearby(); });
+    secLabels.push(new maplibregl.Marker({ element:el }).setLngLat(vDirect(p.lon, p.lat, secMid(p, k), R * 0.72)).addTo(map));
+  }
+  map.getSource('secs').setData({ type:'FeatureCollection', features:feats });
+  drawRings();
+  scaleOverlays();
+}
+
+/* Uzaklaştıkça işaretler halkanın içinde kalsın: boyutu halkanın ekrandaki yarıçapına göre ayarla */
+const pxRadius = (lat, km) => km*1000 / (40075016.686 * Math.cos(lat*RAD) / (512 * 2 ** map.getZoom()));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function scaleOverlays() {
+  points.forEach(p => {
+    const m = markers.get(p.id); if (!m) return;
+    const r = pxRadius(p.lat, Math.min(...MODE_KM[p.mode]));
+    const size = clamp(r * 0.7, 8, 28);
+    const el = m.getElement();
+    el.style.width = el.style.height = size + 'px';
+    el.classList.toggle('dot', size < 17);
+    el.style.borderWidth = size < 17 ? '2px' : '3px';
+  });
+  const p = active();
+  if (p && secLabels.length) {
+    const r = pxRadius(p.lat, maxKm(p));
+    const size = clamp(r * 0.2, 26, 40), show = r > 120; // okunaklı kalmayacaksa hiç gösterme
+    secLabels.forEach(m => { const el = m.getElement();
+      el.style.display = show ? '' : 'none';
+      el.style.width = el.style.height = size + 'px'; el.style.fontSize = size * 0.42 + 'px'; });
+  }
+}
+map.on('zoom', scaleOverlays);
+
+function renderSecs() {
+  const p = active(); if (!hasSectors(p)) return;
+  const base = nearItems.filter(i => (nearRing === 0 || i.ring === nearRing) && (nearCat === 'all' || i.cat === nearCat));
+  const cnt = Array(SECTORS).fill(0); base.forEach(i => cnt[sectorOf(p, i.brg)]++);
+  $('secs').innerHTML = `<button data-s="-1" class="${nearSec < 0 ? 'on' : ''}">${t('all')}<small>${base.length}</small></button>` +
+    cnt.map((c, k) => `<button data-s="${k}" class="${nearSec === k ? 'on' : ''}" title="${dirLong(secMid(p, k))}">${k + 1} ${dirName(secMid(p, k))}<small>${c}</small></button>`).join('');
+  const r = p.rot ?? 0; $('rot').value = r; $('rotV').textContent = `${r}° ${dirName(r)}`;
+}
+$('secs').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; nearSec = +b.dataset.s; nearShown = 25; drawSectors(); renderNearby(); };
+$('rot').oninput = e => { const p = active(); if (!p) return; p.rot = +e.target.value; save(); drawSectors(); renderNearby(); };
+
+let nearItems = [], nearRing = 5, nearCat = 'all', nearShown = 25, nearCtrl;
+const fmtD = m => m < 1000 ? `${Math.round(m/10)*10} m` : `${(m/1000).toFixed(m < 10000 ? 1 : 0)} km`;
+const PANEL_PAD = () => window.innerWidth > 560 ? { top:30, bottom:30, left:410, right:30 } : 20;
+const OFFSET = () => [window.innerWidth > 560 ? 190 : 0, 0];
+
+/* ================= Seçilen noktalar ================= */
+// mode: '5' | '20' | 'both'
+const MODE_KM = { '5':[5], '20':[20], both:[5,20] };
+const MODE_LABEL = { '5':'5 km', '20':'20 km', both:'modeBoth' };
+const C5 = { blue:'#208dff', green:'#1aa260' }, C20 = '#df3a3a';
+const c5 = p => C5[p?.c5] || C5.blue;
+const ringCol = (p, km) => km === 5 ? c5(p) : C20;
+const badgeBg = p => p.mode === '5' ? c5(p) : p.mode === '20' ? C20 : `linear-gradient(135deg, ${c5(p)} 50%, ${C20} 50%)`;
+let points = [], activeId = null, nextId = 1, candidate = null;
+const markers = new Map();
+/* Dosyaya gömülü harita (Paylaşılabilir dosya kaydet ile üretilen kopyalarda dolu gelir) */
+const EMB = (() => { try { const t = document.getElementById('tb-data')?.textContent.trim(); return t ? JSON.parse(t) : null; } catch { return null; } })();
+const rid = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => 'abcdefghijkmnpqrstuvwxyz23456789'[b % 32]).join('');
+// Her gömülü dosyanın kendi kayıt anahtarı olsun: alıcının ya da senin başka haritaların birbirini ezmesin
+const SID = EMB?.sid || rid();
+const STORE_KEY = EMB?.sid ? `tb-points-file-${EMB.sid}` : 'tb-points';
+let useEmbedded = false;
+{
+  let local = null;
+  try { local = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch {}
+  // Dosyadaki veri, bu tarayıcıdaki kayıttan daha yeniyse dosyadakini kullan
+  if (EMB?.points?.length && (!local?.points?.length || (local.savedAt || 0) < (EMB.savedAt || 0))) useEmbedded = true;
+  else if (local?.points?.length) { points = local.points; nextId = Math.max(...points.map(p => p.id)) + 1; activeId = local.activeId ?? points[0].id; }
+}
+const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify({ points, activeId, savedAt:Date.now() })); } catch {} };
+const maxKm = p => Math.max(...MODE_KM[p.mode]);
+const active = () => points.find(p => p.id === activeId);
+
+function drawRings() {
+  if (!map.getSource('rings')) return;
+  const feats = [];
+  // önce büyük halkalar, sonra küçükler (küçükler üstte kalsın); aktif nokta en üstte
+  const order = [...points].sort((a, b) => (a.id === activeId) - (b.id === activeId));
+  for (const km of [20, 5]) for (const p of order) if (MODE_KM[p.mode].includes(km))
+    feats.push({ type:'Feature', properties:{ km, pid:p.id, act:p.id === activeId, col:ringCol(p, km),
+      nofill: p.id === activeId && km === 20 && nearSec >= 0 && hasSectors(p) }, geometry:{ type:'Polygon', coordinates:[ringCoords(p.lon, p.lat, km)] } });
+  map.getSource('rings').setData({ type:'FeatureCollection', features:feats });
+}
+
+function drawMarkers() {
+  for (const [id, m] of markers) if (!points.some(p => p.id === id)) { m.remove(); markers.delete(id); }
+  points.forEach((p, i) => {
+    let m = markers.get(p.id);
+    if (!m) {
+      const el = document.createElement('div');
+      el.addEventListener('click', ev => { ev.stopPropagation(); setActive(p.id, true); });
+      m = new maplibregl.Marker({ element:el, draggable:true }).setLngLat([p.lon, p.lat]).addTo(map);
+      m.on('drag', () => { const ll = m.getLngLat(); p.lon = ll.lng; p.lat = ll.lat; drawRings(); renderPairs(); if (p.id === activeId) drawSectors(); });
+      m.on('dragend', () => { p.sub = t('moved'); renderPoints(); save(); if (p.id === activeId) loadNearby(); });
+      markers.set(p.id, m);
+    }
+    const el = m.getElement();
+    // className'i ezme: MapLibre'nin 'maplibregl-marker' sınıfı (position:absolute) kalmalı
+    el.classList.add('pmk');
+    el.classList.toggle('act', p.id === activeId);
+    el.classList.toggle('nolabel', p.showLabel === false);
+    el.style.background = badgeBg(p);
+    el.innerHTML = `<span>${i + 1}</span><span class="mlabel">${esc(p.name)}</span>`;
+    el.title = p.name;
+    m.setLngLat([p.lon, p.lat]);
+  });
+}
+
+function renderPoints() {
+  $('pts').style.display = points.length ? 'block' : 'none';
+  $('ptList').innerHTML = points.map((p, i) => `
+    <li data-id="${p.id}" class="${p.id === activeId ? 'act' : ''}">
+      <span class="badge" style="background:${badgeBg(p)}">${i + 1}</span>
+      <div style="min-width:0">
+        <input class="nm" data-name value="${esc(p.name)}" title="${t('renameTip')}" maxlength="60">
+        <div class="sbrow">
+          <span class="sw" title="${t('c5Tip')}">${Object.entries(C5).map(([k, c]) =>
+            `<button data-c5="${k}" class="${(p.c5 || 'blue') === k ? 'on' : ''}" style="background:${c}" ${p.mode === '20' ? 'disabled' : ''}></button>`).join('')}</span>
+          <span class="sb">${esc(p.sub || '')}</span>
+        </div>
+      </div>
+      <div class="mini">${Object.keys(MODE_KM).map(m => `<button data-mode="${m}" class="${p.mode === m ? 'on' : ''}">${t(MODE_LABEL[m])}</button>`).join('')}</div>
+      <div><button class="ib" data-act="fit" title="${t('fitTip')}">⌖</button><button class="ib" data-act="del" title="${t('delTip')}">✕</button></div>
+    </li>`).join('');
+  renderPairs(); drawMarkers(); drawRings(); scaleOverlays();
+}
+
+function renderPairs() {
+  let h = '';
+  for (let i = 0; i < points.length; i++) for (let j = i + 1; j < points.length; j++) {
+    const a = points[i], b = points[j], d = vDist(a.lon, a.lat, b.lon, b.lat) / 1000;
+    const ra = maxKm(a), rb = maxKm(b);
+    const rel = d + Math.min(ra, rb) <= Math.max(ra, rb) ? t('relInside')
+              : d < ra + rb ? t('relCross') : t('relApart');
+    h += `<div><span>${i + 1} ↔ ${j + 1} · ${rel}</span><span>${fmtD(d * 1000)}</span></div>`;
+  }
+  $('pairs').innerHTML = h;
+}
+
+$('ptList').onclick = e => {
+  const li = e.target.closest('li[data-id]'); if (!li) return;
+  const p = points.find(x => x.id === +li.dataset.id);
+  const mb = e.target.closest('[data-mode]'), ab = e.target.closest('[data-act]'), cb = e.target.closest('[data-c5]');
+  if (e.target.matches('input[data-name]')) {
+    if (activeId !== p.id) { setActive(p.id, false); $('ptList').querySelector(`li[data-id="${p.id}"] input[data-name]`)?.focus(); }
+    return;
+  }
+  if (cb) { if (cb.disabled) return; p.c5 = cb.dataset.c5; renderPoints(); save(); if (p.id === activeId) { setNearData(); renderNearby(); } return; }
+  if (mb) { p.mode = mb.dataset.mode; activeId = p.id; renderPoints(); save(); loadNearby(); return; }
+  if (ab?.dataset.act === 'del') { removePoint(p.id); return; }
+  setActive(p.id, true);
+};
+
+$('ptList').addEventListener('input', e => {
+  if (!e.target.matches('input[data-name]')) return;
+  const p = points.find(x => x.id === +e.target.closest('li').dataset.id); if (!p) return;
+  p.name = e.target.value.trim() || t('unnamed');
+  const m = markers.get(p.id); if (m) { m.getElement().querySelector('.mlabel').textContent = p.name; m.getElement().title = p.name; }
+  if (p.id === activeId) setNearTitle();
+  save();
+});
+$('ptList').addEventListener('keydown', e => { if (e.target.matches('input[data-name]') && e.key === 'Enter') e.target.blur(); });
+
+function setActive(id, fit) {
+  if (activeId !== id) { activeId = id; renderPoints(); save(); loadNearby(); }
+  if (fit) fitPoints([active()]);
+}
+function removePoint(id) {
+  points = points.filter(p => p.id !== id);
+  if (activeId === id) activeId = points[0]?.id ?? null;
+  renderPoints(); save(); loadNearby();
+}
+function fitPoints(list) {
+  list = list.filter(Boolean); if (!list.length) return;
+  const b = new maplibregl.LngLatBounds();
+  for (const p of list) for (const c of ringCoords(p.lon, p.lat, maxKm(p), 36)) b.extend(c);
+  map.fitBounds(b, { padding:PANEL_PAD(), duration:600 });
+}
+$('fitAll').onclick = () => fitPoints(points);
+
+function addPoint(mode, col) {
+  if (!candidate) return;
+  const p = { id:nextId++, mode, rot:0, c5:col || 'blue', ...candidate };
+  points.push(p); activeId = p.id; candidate = null;
+  pin.remove(); $('result').style.display = 'none';
+  renderPoints(); save(); loadNearby(); fitPoints([p]);
+}
+document.querySelector('.addbar').onclick = e => { const b = e.target.closest('[data-add]'); if (b) addPoint(b.dataset.add, b.dataset.c); };
+
+/* ================= Aktif noktanın çevresi ================= */
+function renderNearby() {
+  const p = active(); if (!p) return;
+  const mk = maxKm(p);
+  $('seg20').style.display = $('segAll').style.display = mk > 5 ? '' : 'none';
+  if (mk <= 5) nearRing = 5;
+  const inSec = i => !hasSectors(p) || nearSec < 0 || sectorOf(p, i.brg) === nearSec;
+  const inRing = nearItems.filter(i => (nearRing === 0 || i.ring === nearRing) && inSec(i));
+  $('c5').textContent = nearItems.filter(i => i.ring === 5 && inSec(i)).length;
+  $('c20').textContent = nearItems.filter(i => i.ring === 20 && inSec(i)).length;
+  $('cAll').textContent = nearItems.filter(inSec).length;
+  [...$('seg').children].forEach(b => b.classList.toggle('on', +b.dataset.r === nearRing));
+  const present = new Set(inRing.map(i => i.cat));
+  if (nearCat !== 'all' && !present.has(nearCat)) nearCat = 'all';
+  $('cats').innerHTML = `<button data-c="all" class="${nearCat==='all'?'on':''}">${t('catAll')}</button>` +
+    Object.entries(CATS).map(([k, c]) => `<button data-c="${k}" class="${nearCat===k?'on':''}" ${present.has(k)?'':'disabled'}>${c.icon} ${t('cat_' + k)}</button>`).join('');
+  const list = inRing.filter(i => nearCat === 'all' || i.cat === nearCat);
+  $('nl').innerHTML = list.length ? list.slice(0, nearShown).map(i =>
+    `<li data-id="${i.id}"><span>${CATS[i.cat].icon}</span><div>${esc(i.name)} <div class="k">${esc(kindLabel(i))}${hasSectors(p) ? ` · ${t('secN', { n:sectorOf(p, i.brg) + 1 })}` : ''} · ${dirName(i.brg)}</div></div><span class="d">${fmtD(i.d)}</span></li>`).join('')
+    : `<li class="nmsg" style="cursor:default">${t('nearEmpty')}</li>`;
+  $('more').style.display = list.length > nearShown ? 'block' : 'none';
+  $('more').textContent = t('more', { n:list.length - nearShown });
+  for (const i of nearItems) map.setFeatureState({ source:'near', id:i.id },
+    { hide: !inSec(i), dim: (nearRing !== 0 && i.ring !== nearRing) || (nearCat !== 'all' && i.cat !== nearCat) });
+  renderSecs();
+}
+$('seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; nearRing = +b.dataset.r; nearShown = 25; renderNearby(); };
+$('cats').onclick = e => { const b = e.target.closest('button'); if (!b || b.disabled) return; nearCat = b.dataset.c; nearShown = 25; renderNearby(); };
+$('more').onclick = () => { nearShown += 50; renderNearby(); };
+$('nl').onclick = e => { const li = e.target.closest('li[data-id]'); if (!li) return; focusNear(nearItems[+li.dataset.id]); };
+
+const popup = new maplibregl.Popup({ closeButton:false, offset:10, maxWidth:'260px' });
+function focusNear(i) {
+  const p = active();
+  map.easeTo({ center:[i.lon, i.lat], zoom:Math.max(map.getZoom(), 13), duration:600, offset:OFFSET() });
+  popup.setLngLat([i.lon, i.lat]).setHTML(`<b>${esc(i.name)}</b><br>${esc(kindLabel(i))} · ${esc(p ? t('popupDist', { name:p.name, d:fmtD(i.d) }) : fmtD(i.d))}`).addTo(map);
+}
+map.on('click', 'near-pt', e => { e.preventDefault(); focusNear(nearItems[e.features[0].properties.id]); });
+map.on('mouseenter', 'near-pt', () => map.getCanvas().style.cursor = 'pointer');
+map.on('mouseleave', 'near-pt', () => map.getCanvas().style.cursor = '');
+
+function setNearData() {
+  const p = active();
+  map.getSource('near')?.setData({ type:'FeatureCollection', features: nearItems.map(i =>
+    ({ type:'Feature', id:i.id, properties:{ id:i.id, ring:i.ring, col:ringCol(p, i.ring) }, geometry:{ type:'Point', coordinates:[i.lon, i.lat] } })) });
+  $('seg').querySelector('.r5').style.color = c5(p);
+}
+
+function setNearTitle() {
+  const p = active(); if (!p) return;
+  $('nearTitle').textContent = t('nearTitle', { i:points.indexOf(p) + 1, name:p.name, km:MODE_KM[p.mode].join(' + ') });
+}
+
+async function loadNearby() {
+  const p = active();
+  nearCtrl?.abort(); popup.remove();
+  nearItems = []; nearCat = 'all'; nearShown = 25; nearSec = -1;
+  nearRing = p && maxKm(p) > 5 ? 0 : 5;
+  map.getSource('near')?.setData(EMPTY);
+  drawSectors();
+  if (!p) { $('near').style.display = 'none'; return; }
+  $('secs').innerHTML = '';
+  const idx = points.indexOf(p) + 1;
+  setNearTitle();
+  $('near').style.display = 'block'; $('cats').innerHTML = ''; $('c5').textContent = $('c20').textContent = '';
+  $('seg20').style.display = maxKm(p) > 5 ? '' : 'none';
+  $('nl').innerHTML = `<li class="nmsg" style="cursor:default">${t('nearLoading')}</li>`; $('more').style.display = 'none';
+  const ctrl = nearCtrl = new AbortController();
+  try {
+    const els = await overpassNearby(p.lon, p.lat, ctrl.signal);
+    if (ctrl !== nearCtrl) return;
+    nearItems = buildNearby(els, p.lon, p.lat, maxKm(p));
+    setNearData();
+    renderNearby();
+  } catch (e) {
+    if (ctrl.signal.aborted) return;
+    $('nl').innerHTML = `<li class="nmsg" style="cursor:default">${esc(t('nearErr', { m:e.message }))}</li>`;
+  }
+}
+
+/* ================= Aday nokta (henüz eklenmemiş seçim) ================= */
+function showResult(title, sub, lon, lat, zoom) {
+  candidate = { name:title, sub, lon, lat };
+  pin.setLngLat([lon, lat]).addTo(map);
+  if (zoom) map.easeTo({ center:[lon, lat], zoom, duration:600, offset:OFFSET() });
+  $('rName').textContent = title;
+  $('rAddr').textContent = sub;
+  $('rCoord').textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+  $('result').style.display = 'block';
+}
+
+$('rCopy').onclick = async () => {
+  try { await navigator.clipboard.writeText($('rCoord').textContent); $('rCopy').textContent = t('copied'); }
+  catch { $('rCopy').textContent = t('copyFail'); }
+  setTimeout(() => $('rCopy').textContent = t('copyCoord'), 1500);
+};
+
+/* ================= Haritaya tıkla: ters arama (reverse geocoding) ================= */
+let revCtrl;
+map.on('click', async e => {
+  if (e.defaultPrevented) return; // bir çevre noktasına tıklandı
+  const { lng, lat } = e.lngLat;
+  showResult(t('revLoading'), '', lng, lat, 0);
+  revCtrl?.abort(); const ctrl = revCtrl = new AbortController();
+  try {
+    const [f] = await photon('/reverse', [['lat',lat.toFixed(6)],['lon',lng.toFixed(6)],['lang',LANG],['limit','1']], ctrl.signal);
+    if (ctrl !== revCtrl) return;
+    if (f) { const d = describe(f); showResult(d.title, d.sub, lng, lat, 0); }
+    else showResult(t('picked'), t('noAddr'), lng, lat, 0);
+  } catch (err) { if (!ctrl.signal.aborted) showResult(t('picked'), t('addrFail'), lng, lat, 0); }
+});
+
+/* ================= Paylaşım: kısa link ================= */
+function serialize() {
+  const c = map.getCenter();
+  return { v:1,
+    points: points.map(p => ({ n:p.name.slice(0, 60), s:(p.sub || '').slice(0, 160), lo:+p.lon.toFixed(6), la:+p.lat.toFixed(6),
+                               m:p.mode, c:p.c5 || 'blue', r:Math.round(p.rot || 0) % 360 })),
+    a: points.findIndex(p => p.id === activeId), sec: nearSec,
+    view: { c:[+c.lng.toFixed(5), +c.lat.toFixed(5)], z:+map.getZoom().toFixed(2) } };
+}
+function deserialize(d) {
+  if (!d || d.v !== 1 || !Array.isArray(d.points)) throw new Error(t('badData'));
+  points = d.points.map((q, i) => ({ id:i + 1, name:String(q.n || 'Nokta'), sub:String(q.s || ''), lon:+q.lo, lat:+q.la,
+    mode: MODE_KM[q.m] ? q.m : '5', c5: C5[q.c] ? q.c : 'blue', rot: Number(q.r) || 0 }));
+  nextId = points.length + 1;
+  activeId = points[d.a]?.id ?? points[0]?.id ?? null;
+}
+
+function shareMsg(t, err) { $('shareBox').style.display = 'block'; $('shareMsg').textContent = t; $('shareMsg').className = 'msg' + (err ? ' err' : ''); }
+const fileStamp = () => { const d = new Date(), p = n => String(n).padStart(2, '0'); return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}`; };
+const slug = t => t.toLocaleLowerCase('tr-TR').replace(/[çğıöşü]/g, c => ({ ç:'c', ğ:'g', ı:'i', ö:'o', ş:'s', ü:'u' }[c]))
+                   .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30) || 'harita';
+function downloadBlob(blob, name) {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
+/* ================= Paylaşım: seçimi içine gömülü HTML dosyası ================= */
+function buildSharedHtml() {
+  const src = window.__TB_SRC;
+  if (!src) throw new Error(t('srcFail'));
+  const data = { ...serialize(), sid:SID, savedAt:Date.now() };
+  // script kapanış etiketini ve satır ayırıcılarını kaçır
+  const json = JSON.stringify(data).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+  const scripts = [...document.querySelectorAll('script')]
+    .filter(sc => sc.id !== 'tb-data')
+    .map(sc => sc.outerHTML).join('\n');
+  return `<!DOCTYPE html>\n<html lang="tr">\n${src.head}\n<body>${src.body}\n<script type="application/json" id="tb-data">${json}<\/script>\n${scripts}\n</body>\n</html>\n`;
+}
+$('fileBtn').onclick = () => {
+  if (!points.length) { shareMsg(t('needPoint'), true); return; }
+  try {
+    const html = buildSharedHtml();
+    const name = `Alfasis-${t('fileBase')}-${slug(points[0].name)}-${fileStamp()}.html`;
+    downloadBlob(new Blob([html], { type:'text/html;charset=utf-8' }), name);
+    shareMsg(t('fileSaved', { name }));
+  } catch (e) { shareMsg(t('fileErr', { m:e.message }), true); }
+};
+
+/* ================= Paylaşım: PNG görsel ================= */
+function rrect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x+r, y); ctx.arcTo(x+w, y, x+w, y+h, r); ctx.arcTo(x+w, y+h, x, y+h, r); ctx.arcTo(x, y+h, x, y, r); ctx.arcTo(x, y, x+w, y, r); ctx.closePath(); }
+function drawBadge(ctx, p, x, y, rad, num) {
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2;
+  ctx.beginPath(); ctx.arc(x, y, rad + 3, 0, 2*Math.PI); ctx.fillStyle = '#fff'; ctx.fill();
+  ctx.restore();
+  if (p.mode === 'both') {   // yarı 5 km rengi, yarı kırmızı (135°)
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.arc(x, y, rad, -Math.PI/4, 3*Math.PI/4); ctx.closePath(); ctx.fillStyle = C20; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.arc(x, y, rad, 3*Math.PI/4, 7*Math.PI/4); ctx.closePath(); ctx.fillStyle = c5(p); ctx.fill();
+  } else { ctx.beginPath(); ctx.arc(x, y, rad, 0, 2*Math.PI); ctx.fillStyle = p.mode === '5' ? c5(p) : C20; ctx.fill(); }
+  if (num != null) { ctx.fillStyle = '#fff'; ctx.font = `700 ${Math.round(rad*0.95)}px system-ui,sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(num, x, y + 0.5); }
+}
+function grabMapImage() {
+  return new Promise((res, rej) => {
+    map.once('render', () => { try { res(map.getCanvas().toDataURL('image/png')); } catch (e) { rej(e); } });
+    map.triggerRepaint();
+  });
+}
+async function exportPng() {
+  const src = await grabMapImage();
+  const img = new Image(); img.src = src; await img.decode();
+  const W = img.width, H = img.height, k = W / map.getCanvas().clientWidth;   // k = piksel oranı
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0);
+  ctx.scale(k, k);
+  const w = W / k, h = H / k;
+
+  // dilim etiketleri (ekranda görünüyorsa)
+  const p0 = active();
+  if (p0 && hasSectors(p0) && pxRadius(p0.lat, maxKm(p0)) > 120) {
+    const R = maxKm(p0) * 1000, size = clamp(pxRadius(p0.lat, maxKm(p0)) * 0.2, 26, 40);
+    for (let kk = 0; kk < SECTORS; kk++) {
+      const q = map.project(vDirect(p0.lon, p0.lat, secMid(p0, kk), R * 0.72)), sel = kk === nearSec;
+      ctx.beginPath(); ctx.arc(q.x, q.y, size/2, 0, 2*Math.PI); ctx.fillStyle = sel ? '#1c1d21' : 'rgba(255,255,255,.88)'; ctx.fill();
+      ctx.fillStyle = sel ? '#fff' : '#1c1d21'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = `700 ${Math.round(size*0.42)}px system-ui,sans-serif`; ctx.fillText(kk + 1, q.x, q.y - size*0.1);
+      ctx.fillStyle = sel ? '#ddd' : '#6b6f78'; ctx.font = `600 ${Math.round(size*0.26)}px system-ui,sans-serif`; ctx.fillText(dirName(secMid(p0, kk)), q.x, q.y + size*0.22);
+    }
+  }
+  // nokta işaretleri + isim etiketleri
+  points.forEach((p, i) => {
+    const q = map.project([p.lon, p.lat]);
+    const size = clamp(pxRadius(p.lat, Math.min(...MODE_KM[p.mode])) * 0.7, 8, 28), dot = size < 17;
+    drawBadge(ctx, p, q.x, q.y, size/2, dot ? null : i + 1);
+    if (!dot) {
+      ctx.font = '600 12px system-ui,sans-serif'; const tw = ctx.measureText(p.name).width;
+      const lx = q.x + size/2 + 8, ly = q.y - 11;
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.2)'; ctx.shadowBlur = 4;
+      rrect(ctx, lx, ly, tw + 14, 22, 6); ctx.fillStyle = '#fff'; ctx.fill(); ctx.restore();
+      ctx.fillStyle = '#1c1d21'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(p.name, lx + 7, q.y);
+    }
+  });
+  // lejant (sol üst)
+  const rows = points.map((p, i) => `${i + 1}. ${p.name} — ${MODE_KM[p.mode].join(' + ')} km`);
+  if (p0 && hasSectors(p0) && nearSec >= 0) rows.push(t('legendSel', { name:p0.name, sec:t('secN', { n:nearSec + 1 }), dir:dirLong(secMid(p0, nearSec)) }));
+  ctx.font = '500 12.5px system-ui,sans-serif';
+  const lw = Math.min(w - 32, Math.max(220, ...rows.map(r => ctx.measureText(r).width + 40)));
+  const lh = 40 + rows.length * 20;
+  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.18)'; ctx.shadowBlur = 10;
+  rrect(ctx, 16, 16, lw, lh, 10); ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.fill(); ctx.restore();
+  ctx.fillStyle = '#1c1d21'; ctx.font = '700 14px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(t('legendTitle'), 28, 38);
+  rows.forEach((r, i) => {
+    const y = 60 + i * 20, p = points[i];
+    if (p) drawBadge(ctx, p, 34, y - 4, 6, null);
+    ctx.fillStyle = '#1c1d21'; ctx.font = '500 12.5px system-ui,sans-serif';
+    ctx.fillText(r, p ? 46 : 28, y);
+  });
+  // atıf + tarih (sağ alt)
+  const foot = `${t('footer')} · Alfasis.gr · ${new Date().toLocaleDateString(LOCALE())}`;
+  ctx.font = '11px system-ui,sans-serif'; const fw = ctx.measureText(foot).width;
+  rrect(ctx, w - fw - 24, h - 26, fw + 16, 20, 5); ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fill();
+  ctx.fillStyle = '#333'; ctx.textBaseline = 'middle'; ctx.fillText(foot, w - fw - 16, h - 16);
+
+  const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+  const name = `Alfasis-${t('fileBase')}-${slug(points[0]?.name || t('fileBase'))}-${fileStamp()}.png`;
+  const file = new File([blob], name, { type:'image/png' });
+  // telefonda paylaşım menüsü (WhatsApp vb.), bilgisayarda indirme
+  if (matchMedia('(pointer: coarse)').matches && navigator.canShare?.({ files:[file] })) {
+    try { await navigator.share({ files:[file], title:'Alfasis harita' }); return; } catch (e) { if (e.name === 'AbortError') return; }
+  }
+  downloadBlob(blob, name);
+}
+$('pngBtn').onclick = async () => {
+  const b = $('pngBtn'); b.disabled = true; b.textContent = t('pngBusy');
+  try { await exportPng(); }
+  catch (e) { shareMsg(t('pngErr', { m:e.message }), true); }
+  finally { b.disabled = false; b.textContent = t('pngBtn'); }
+};
+
+function renderEmbInfo() {
+  if (!EMB?.points?.length) return;
+  $('sharedInfo').textContent = t('embInfo', { date: EMB.savedAt ? ' · ' + new Date(EMB.savedAt).toLocaleString(LOCALE(), { dateStyle:'short', timeStyle:'short' }) : '' });
+}
+
+/* ================= Dil değiştirme: her şeyi yeniden çiz ================= */
+function setLang(l) {
+  if (!LANGS.includes(l) || l === LANG_UI) return;
+  LANG_UI = l;
+  try { localStorage.setItem('tb-lang', l); } catch {}
+  applyStatic();
+  document.querySelectorAll('.attr-search').forEach(el => el.textContent = t('attrSearch'));
+  step.rerender?.();
+  if (!$('place').disabled) $('place').placeholder = t('placePhCity', { city:$('place').dataset.city || '' });
+  else $('place').placeholder = t('placePhNone');
+  renderEmbInfo();
+  if (points.length) { renderPoints(); setNearTitle(); drawSectors(); if (nearItems.length) renderNearby(); }
+  if ($('shareBox').style.display === 'block') $('shareBox').style.display = 'none';
+}
+$('langsw').onclick = e => { const b = e.target.closest('[data-lang]'); if (b) setLang(b.dataset.lang); };
+
+/* ================= Başlangıç: dosyaya gömülü haritayı ya da kayıtlı listeyi yükle ================= */
+async function loadEmbedded() {
+  deserialize(EMB);
+  renderPoints(); save();
+  if (EMB.view?.c) map.jumpTo({ center:EMB.view.c, zoom:EMB.view.z }); else fitPoints(points);
+  await loadNearby();
+  if (hasSectors(active()) && EMB.sec >= 0) { nearSec = EMB.sec; drawSectors(); renderNearby(); }
+}
+map.once('style.load', () => {
+  ensureLayers();
+  if (EMB?.points?.length) {
+    $('sharedInfo').style.display = 'block';
+    renderEmbInfo();
+  }
+  if (useEmbedded) loadEmbedded();
+  else if (points.length) { renderPoints(); loadNearby(); fitPoints(points); }
+});
+</script>
+</body>
+</html>
